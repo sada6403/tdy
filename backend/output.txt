@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "message": "Application approved successfully and customer account created",
+  "data": {
+    "userId": "NFP-676551"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "nf-plantation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.38.0",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^0.563.0",
+    "nf-plantation-root": "file:..",
+    "phosphor-react": "^1.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.0.12"
+  }
+}

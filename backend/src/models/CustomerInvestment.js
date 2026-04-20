@@ -1,0 +1,29 @@
+const mongoose = require('mongoose');
+
+const CustomerInvestmentSchema = new mongoose.Schema({
+  customerId:        { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true, index: true },
+  planId:            { type: mongoose.Schema.Types.ObjectId, ref: 'InvestmentPlan', required: true },
+  planName:          { type: String },
+  durationMonths:    { type: Number },
+  monthlyROI:        { type: Number },
+  investedAmount:    { type: Number, required: true },
+  profitDestination: { type: String, enum: ['WALLET', 'BANK'], default: 'WALLET' },
+  rulesAccepted:     { type: Boolean, default: false },
+  signatureConfirmed:{ type: Boolean, default: false },
+  signatureData:     { type: String },
+  note:              { type: String },
+  referenceNumber:   { type: String },
+  approvedBy:        { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  startDate:         { type: Date },
+  endDate:           { type: Date },
+  monthlyProfit:     { type: Number },
+  status: {
+    type: String,
+    enum: ['PENDING_ACTIVATION_APPROVAL', 'ACTIVE', 'MATURED', 'CANCELLED', 'REJECTED'],
+    default: 'PENDING_ACTIVATION_APPROVAL'
+  },
+  rejectionReason:   { type: String },
+  createdAt: { type: Date, default: Date.now }
+}, { timestamps: true });
+
+module.exports = mongoose.model('CustomerInvestment', CustomerInvestmentSchema);
