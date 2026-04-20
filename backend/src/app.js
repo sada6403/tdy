@@ -40,7 +40,13 @@ app.use(helmet({
     frameguard: false, // Allow iframes for document preview
 }));
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: [
+        'http://localhost:5173', 
+        'http://localhost:5174', 
+        'https://nfplantation.com', 
+        'https://admin.nfplantation.com',
+        'https://www.nfplantation.com'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
