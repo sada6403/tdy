@@ -37,7 +37,8 @@ const Home = () => {
   const renderTitle = () => {
     if(!slide) return (
       <>
-        Sri Lanka's Most <span className="notranslate" translate="no">&nbsp;</span>
+        <span className="notranslate" translate="no">NF Plantation</span> — Sri Lanka's Most 
+        <span className="notranslate" translate="no">&nbsp;</span>
         <em>Trusted Agricultural</em>
         <span className="notranslate" translate="no">&nbsp;</span> Investment Platform
       </>
