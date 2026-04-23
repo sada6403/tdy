@@ -17,6 +17,8 @@ const publicRoutes = require('./routes/publicRoutes');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 // --- Rate Limiting (Banking Grade Protection) ---
 const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -26,7 +28,7 @@ const globalLimiter = rateLimit({
 
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
-    max: 20, // Strict limit for auth attempts
+    max: 100, // Limit for auth attempts
     message: { success: false, message: 'Too many authentication attempts. Please try again after 15 minutes.' }
 });
 
