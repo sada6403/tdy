@@ -191,6 +191,9 @@ exports.getApplicationForResubmit = async (req, res, next) => {
  * @route   POST /api/applications/submit
  */
 exports.submitApplication = async (req, res, next) => {
+    console.log(`[APPLICATION_SUBMIT] 📥 Received request for: ${req.body.name || 'Unknown'} (${req.body.nic || 'No NIC'})`);
+    console.log('[APPLICATION_SUBMIT] 📂 Files object keys:', Object.keys(req.files || {}));
+    
     const session = await getSafeSession();
     if (session) await safeStartTransaction(session);
 
