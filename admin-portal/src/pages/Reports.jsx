@@ -24,7 +24,7 @@ const Reports = () => {
       try {
         setLoading(true);
         const res = await apiClient.get('/admin/reports/summary');
-        if (res.data.success) setData(res.data.data);
+        if (res.success) setData(res.data);
         else setError('Failed to load report data.');
       } catch (err) {
         setError('Could not connect to server.');

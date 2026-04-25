@@ -45,7 +45,7 @@ exports.getAllBranches = async (req, res, next) => {
                     as: 'customer'
                 }
             },
-            { $unwind: { path: '$customer', preserveNullAndEmpty: false } },
+            { $unwind: '$customer' },
             {
                 $group: {
                     _id: '$customer.branchId',

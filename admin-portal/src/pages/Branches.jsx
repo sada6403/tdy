@@ -37,12 +37,18 @@ const Branches = () => {
 
   const fetchBranches = async () => {
     try {
-      const [branchRes, statsRes] = await Promise.all([
+      const [branchRes, statsRes] = await Promise.allSettled([
         branchesService.getAllBranches(),
         branchesService.getStats()
       ]);
-      if (branchRes.success) setBranches(branchRes.data);
-      if (statsRes.success) setStats(statsRes.data);
+      if (branchRes.status === 'fulfilled' && branchRes.value?.success) {
+        setBranches(branchRes.value.data);
+      } else {
+        console.error('Branches load failed:', branchRes.reason);
+      }
+      if (statsRes.status === 'fulfilled' && statsRes.value?.success) {
+        setStats(statsRes.value.data);
+      }
     } catch (err) {
       console.error('Error fetching branches:', err);
     } finally {
@@ -174,10 +180,10 @@ const Branches = () => {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
         {[
-          { label: 'Total Branches', value: stats.totalBranches || branches.length || '—', icon: <Building2 />, color: 'var(--primary)' },
-          { label: 'Active Network', value: stats.totalBranches || branches.length || '—', icon: <CheckCircle2 />, color: '#10b981' },
-          { label: 'Total Customers', value: stats.totalCustomers?.toLocaleString() || '—', icon: <Users />, color: '#3b82f6' },
-          { label: 'Network Value', value: stats.networkValueFormatted || '—', icon: <TrendingUp />, color: '#8b5cf6' },
+          { label: 'Total Branches', value: stats.totalBranches > 0 ? stats.totalBranches : (branches.length || '—'), icon: <Building2 />, color: 'var(--primary)' },
+          { label: 'Active Network', value: stats.totalBranches > 0 ? stats.totalBranches : (branches.length || '—'), icon: <CheckCircle2 />, color: '#10b981' },
+          { label: 'Total Customers', value: stats.totalCustomers != null ? stats.totalCustomers.toLocaleString() : '—', icon: <Users />, color: '#3b82f6' },
+          { label: 'Network Value', value: stats.networkValueFormatted || 'LKR 0', icon: <TrendingUp />, color: '#8b5cf6' },
         ].map((stat, i) => (
           <div key={i} className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: `${stat.color}15`, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
