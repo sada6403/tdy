@@ -52,17 +52,33 @@ const BranchMap = ({ user }) => {
         { name: "Kegalle", lat: 7.2513, lng: 80.3464 }
     ];
 
-    const branches = [
-        { name: "Kilinochchi HQ", address: "150, Housing Scheme, Kannakipuram", lat: 9.3803, lng: 80.4070, type: 'Main Office' },
-        { name: "Jaffna Branch", address: "Stafford Road, Jaffna", lat: 9.6615, lng: 80.0255, type: 'Branch' },
-        { name: "Colombo Office", address: "Galle Road, Colombo 03", lat: 6.9271, lng: 79.8612, type: 'Branch' }
-    ];
+    const [branches, setBranches] = useState([]);
 
     useEffect(() => {
-        // Initialize with default order if no location
-        if (!userLocation) {
-            setSortedBranches(branches);
-        }
+        const fetchBranches = async () => {
+            try {
+                // Assuming you have imported PublicService or similar
+                const { PublicService } = await import('../../../services/api');
+                const response = await PublicService.getBranches();
+                if (response && response.data) {
+                    setBranches(response.data);
+                    if (!userLocation) {
+                        setSortedBranches(response.data);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch branches", error);
+                // Fallback to hardcoded if backend is unreachable
+                const fallback = [
+                    { name: "Kilinochchi HQ", address: "150, Housing Scheme, Kannakipuram", lat: 9.3803, lng: 80.4070, type: 'Main Office' },
+                    { name: "Jaffna Branch", address: "Stafford Road, Jaffna", lat: 9.6615, lng: 80.0255, type: 'Branch' },
+                    { name: "Colombo Office", address: "Galle Road, Colombo 03", lat: 6.9271, lng: 79.8612, type: 'Branch' }
+                ];
+                setBranches(fallback);
+                if (!userLocation) setSortedBranches(fallback);
+            }
+        };
+        fetchBranches();
     }, [userLocation]);
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {

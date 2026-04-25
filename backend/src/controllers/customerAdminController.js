@@ -158,7 +158,10 @@ exports.getCustomerProfile = async (req, res, next) => {
         
         const user = await User.findById(id).populate({
             path: 'customerId',
-            populate: { path: 'branchId' }
+            populate: [
+                { path: 'branchId' },
+                { path: 'agentId' }
+            ]
         }).lean();
 
         if (!user) return res.status(404).json({ success: false, message: 'User not found' });
@@ -172,6 +175,7 @@ exports.getCustomerProfile = async (req, res, next) => {
             CustomerInvestment.find({ customerId: cId, status: 'ACTIVE' }).populate('planId').lean()
         ]);
 
+        const agent = customer?.agentId;
         const profile = {
             userId: user.userId,
             fullName: customer?.fullName || user.name,
@@ -181,7 +185,14 @@ exports.getCustomerProfile = async (req, res, next) => {
             branch: customer?.branchId?.name || lastApp?.preferredBranch || 'N/A',
             registrationDate: user.createdAt,
             status: customer?.kycStatus || 'ACTIVE',
-            bankDetails: customer?.bankDetails || lastApp?.bankDetails || {}
+            bankDetails: customer?.bankDetails || lastApp?.bankDetails || {},
+            agent: agent ? {
+                name: agent.name,
+                contact: agent.contact,
+                email: agent.email || null,
+                designation: agent.designation || 'Field Agent',
+                employeeId: agent.employeeId || null
+            } : null
         };
 
         res.json({
@@ -225,8 +236,8 @@ exports.calculateFinancialSummaryInternal = async (customerId) => {
     const totalDeposited = deposits.reduce((sum, d) => sum + d.amount, 0);
     const totalWithdrawn = withdrawals.filter(w => w.status === 'COMPLETED').reduce((sum, w) => sum + w.amount, 0);
     const pendingWithdrawal = withdrawals.filter(w => ['PENDING', 'APPROVED'].includes(w.status)).reduce((sum, w) => sum + w.amount, 0);
-    const totalInvested = investments.filter(i => ['ACTIVE', 'MATURED'].includes(i.status)).reduce((sum, i) => sum + i.amount, 0);
-    const activeInvestmentTotal = investments.filter(i => i.status === 'ACTIVE').reduce((sum, i) => sum + i.amount, 0);
+    const totalInvested = investments.filter(i => ['ACTIVE', 'MATURED'].includes(i.status)).reduce((sum, i) => sum + i.investedAmount, 0);
+    const activeInvestmentTotal = investments.filter(i => i.status === 'ACTIVE').reduce((sum, i) => sum + i.investedAmount, 0);
 
     const profitTransactions = await Transaction.find({ customerId, type: 'PROFIT', status: 'COMPLETED' }).lean();
     const totalEarned = profitTransactions.reduce((sum, t) => sum + t.amount, 0);
@@ -277,12 +288,12 @@ exports.getCustomerInvestments = async (req, res, next) => {
         
         const data = investments.map(inv => ({
             id: inv._id,
-            planName: inv.planId?.title,
-            duration: inv.planId?.duration,
-            investedAmount: inv.amount,
-            startDate: inv.createdAt,
-            maturityDate: inv.maturityDate,
-            monthlyROI: inv.planId?.interestRate ? (inv.planId.interestRate / 12).toFixed(2) : 'N/A',
+            planName: inv.planName || inv.planId?.name || 'N/A',
+            duration: inv.durationMonths || inv.planId?.duration,
+            investedAmount: inv.investedAmount || 0,
+            startDate: inv.startDate || inv.createdAt,
+            maturityDate: inv.endDate || inv.maturityDate,
+            monthlyROI: inv.monthlyROI || (inv.planId?.interestRate ? (inv.planId.interestRate / 12).toFixed(2) : 'N/A'),
             status: inv.status
         }));
 
@@ -350,7 +361,7 @@ exports.getCustomerActivity = async (req, res, next) => {
         });
 
         investments.forEach(i => {
-           events.push({ date: i.createdAt, action: `Activated ${i.planId?.title || 'Investment Plan'} (LKR ${i.amount.toLocaleString()})`, type: 'INVESTMENT', status: i.status });
+           events.push({ date: i.createdAt, action: `Activated ${i.planName || i.planId?.name || 'Investment Plan'} (LKR ${(i.investedAmount || 0).toLocaleString()})`, type: 'INVESTMENT', status: i.status });
         });
 
         withdrawals.forEach(w => {

@@ -7,6 +7,8 @@ const NotificationSchema = new mongoose.Schema({
   type: { type: String, enum: ['INFO', 'SUCCESS', 'WARNING', 'ERROR'], default: 'INFO' },
   message: { type: String, required: true },
   isRead: { type: Boolean, default: false },
+  targetType: { type: String, enum: ['ALL', 'CUSTOMER', 'SYSTEM'], default: 'CUSTOMER' },
+  sentByAdmin: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 

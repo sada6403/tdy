@@ -147,17 +147,14 @@ const WebsiteSettings = () => {
                 `}
             </style>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                 <div>
                     <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#1e293b', letterSpacing: '-0.5px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <Globe size={28} style={{ color: 'var(--primary)' }} /> Website Configuration
                     </h1>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
-                        <p style={{ color: '#64748b', fontSize: '14px', fontWeight: '500', margin: 0 }}>Centralized control for public contact info, social presence, and global branding.</p>
-                        <Link to="/events-management" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color: 'var(--primary)', textDecoration: 'none', padding: '4px 12px', backgroundColor: 'rgba(37,168,94,0.1)', borderRadius: '20px' }}>
-                            <PlayCircle size={14} /> Manage Events & Media →
-                        </Link>
-                    </div>
+                    <p style={{ color: '#64748b', fontSize: '14px', fontWeight: '500', marginTop: '4px' }}>
+                        Centralized control for public contact info, social presence, and global branding.
+                    </p>
                 </div>
                 <button 
                     onClick={handleSave}
@@ -178,6 +175,51 @@ const WebsiteSettings = () => {
                     }}>
                     {isSaving ? 'Synchronizing...' : <><Save size={18} /> Save All Changes</>}
                 </button>
+            </div>
+
+            {/* Sub-navigation Tabs */}
+            <div style={{ 
+                display: 'flex', 
+                gap: '8px', 
+                backgroundColor: '#f1f5f9', 
+                padding: '6px', 
+                borderRadius: '16px',
+                width: 'fit-content'
+            }}>
+                <Link to="/website-settings" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    textDecoration: 'none',
+                    backgroundColor: 'white',
+                    color: 'var(--primary)',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}>
+                    General Settings
+                </Link>
+                <Link to="/hero-management" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    color: '#64748b',
+                    transition: 'all 0.2s'
+                }}>
+                    Hero Management
+                </Link>
+                <Link to="/events-management" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    color: '#64748b',
+                    transition: 'all 0.2s'
+                }}>
+                    Events & Media
+                </Link>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>

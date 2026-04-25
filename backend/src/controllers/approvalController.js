@@ -196,37 +196,70 @@ exports.getPendingApprovalsFlat = async (req, res, next) => {
     }
 };
 
-// @desc    Internal Helper: Finalize across-model customer profile data
+// @desc    Internal Helper: Fully populate Customer document on application approval
 const syncCustomerProfile = async (customer, snapshot, session) => {
     if (!snapshot || !customer) return;
-    const fields = ['bankName', 'branchName', 'accountHolder', 'accountNumber', 'nic', 'dob', 'gender'];
-    fields.forEach(f => {
-        if (snapshot[f]) customer[f] = snapshot[f];
-    });
-    // Sync address from application snapshot
+    const Branch = require('../models/Branch');
+
+    // ── Identity ──
+    if (snapshot.customerName) customer.fullName = snapshot.customerName;
+    if (snapshot.email)        customer.email    = snapshot.email.trim().toLowerCase();
+    if (snapshot.phone)        customer.mobile   = snapshot.phone.trim();
+    if (snapshot.nic)          customer.nic      = snapshot.nic.trim().toUpperCase();
+    if (snapshot.dob)          customer.dob      = snapshot.dob;
+    if (snapshot.gender)       customer.gender   = snapshot.gender;
+
+    // ── Address ──
     if (snapshot.address || snapshot.city || snapshot.district || snapshot.province) {
         customer.address = {
-            line1: snapshot.address || '',
-            city: snapshot.city || '',
+            line1:    snapshot.address  || '',
+            city:     snapshot.city     || '',
             district: snapshot.district || '',
             province: snapshot.province || ''
         };
     }
-    // Sync bank details as nested object as well
+
+    // ── Bank details ──
     if (snapshot.bankName || snapshot.accountNumber) {
         customer.bankDetails = {
-            bankName: snapshot.bankName || '',
-            branchName: snapshot.branchName || '',
+            bankName:      snapshot.bankName      || '',
+            branchName:    snapshot.branchName    || '',
             accountHolder: snapshot.accountHolder || '',
             accountNumber: snapshot.accountNumber || ''
         };
     }
-    // Sync registration signature
-    if (snapshot.signature) {
-        customer.signature = snapshot.signature;
+
+    // ── Preferred branch → resolve to ObjectId ──
+    if (snapshot.preferredBranch) {
+        const branchQuery = mongoose.Types.ObjectId.isValid(snapshot.preferredBranch)
+            ? { _id: snapshot.preferredBranch }
+            : { name: { $regex: new RegExp(snapshot.preferredBranch.trim(), 'i') } };
+        const branch = await Branch.findOne(branchQuery).session(session);
+        if (branch) customer.branchId = branch._id;
     }
-    customer.isActive = true;
+
+    // ── Signature ──
+    if (snapshot.signature) customer.signature = snapshot.signature;
+
+    // ── Photo — use permanent URL (finalizeS3Docs already ran) ──
+    const photoDoc = await ApplicationDocument.findOne({
+        applicationId: snapshot.applicationId,
+        documentType: 'photo'
+    }).session(session);
+    if (photoDoc?.fileUrl) customer.photoUrl = photoDoc.fileUrl;
+
+    // ── Documents list on customer (NIC front/back, bank proof URLs) ──
+    const allDocs = await ApplicationDocument.find({ applicationId: snapshot.applicationId }).session(session);
+    customer.registrationDocuments = allDocs.map(d => ({
+        type:    d.documentType,
+        fileUrl: d.fileUrl,
+        s3Key:   d.s3Key
+    }));
+
+    // ── Status ──
+    customer.isActive  = true;
     customer.kycStatus = 'VERIFIED';
+
     await customer.save({ session });
 };
 
@@ -272,34 +305,41 @@ const createBankingAccount = async (customer, session) => {
     let userRec = await User.findOne({ email: customer.email }).session(session);
     if (!userRec) {
         userRec = new User({
-            name: customer.fullName,
-            email: customer.email,
-            phone: customer.mobile,
-            userId: generatedUserId,
-            password: generatedPassword, // Model hashes this via pre-save hook
-            role: 'CUSTOMER',
-            isActive: true,
+            name:               customer.fullName,
+            email:              customer.email,
+            phone:              customer.mobile,
+            userId:             generatedUserId,
+            password:           generatedPassword,
+            role:               'CUSTOMER',
+            isActive:           true,
             mustChangePassword: true,
-            customerId: customer._id
+            customerId:         customer._id,
+            photoUrl:           customer.photoUrl || ''
         });
         await userRec.save({ session });
     } else {
-        // Safety update if user somehow pre-existed (unlikely in draft flow)
-        userRec.password = generatedPassword;
-        userRec.userId = generatedUserId;
+        userRec.password           = generatedPassword;
+        userRec.userId             = generatedUserId;
         userRec.mustChangePassword = true;
-        userRec.customerId = customer._id;
+        userRec.customerId         = customer._id;
+        userRec.name               = customer.fullName || userRec.name;
+        userRec.phone              = customer.mobile   || userRec.phone;
+        userRec.photoUrl           = customer.photoUrl || userRec.photoUrl || '';
         await userRec.save({ session });
     }
+
+    // Link User ObjectId back onto Customer so auth middleware resolves instantly
+    customer.userId = userRec._id;
+    await customer.save({ session });
 
     // Initialize Wallet
     let walletRec = await Wallet.findOne({ customerId: customer._id }).session(session);
     if (!walletRec) {
         walletRec = new Wallet({
-            customerId: customer._id,
+            customerId:       customer._id,
             availableBalance: 0,
-            heldBalance: 0,
-            totalBalance: 0
+            heldBalance:      0,
+            totalBalance:     0
         });
         await walletRec.save({ session });
     }

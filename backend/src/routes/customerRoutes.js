@@ -5,6 +5,7 @@ const customerController = require('../controllers/customerController');
 const planController = require('../controllers/planController');
 const notificationController = require('../controllers/notificationController');
 const walletController = require('../controllers/walletController');
+const supportController = require('../controllers/supportController');
 const { upload } = require('../utils/s3Service');
 const { requireIdempotency } = require('../middleware/idempotencyMiddleware');
 const { body } = require('express-validator');
@@ -42,5 +43,8 @@ router.get('/withdrawal-request/:id/proof', customerController.downloadWithdrawa
 // Notifications
 router.get('/notifications', notificationController.getMyNotifications);
 router.put('/notifications/:id/read', notificationController.markAsRead);
+
+// Support Requests
+router.post('/support', supportController.submitSupportRequest);
 
 module.exports = router;

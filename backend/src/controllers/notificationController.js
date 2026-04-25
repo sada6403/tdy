@@ -24,7 +24,12 @@ exports.getMyNotifications = async (req, res, next) => {
             return res.json({ success: true, count: 0, data: [] });
         }
 
-        const notifications = await Notification.find({ customerId: customerId }).sort({ createdAt: -1 });
+        const notifications = await Notification.find({
+            $or: [
+                { customerId: customerId },
+                { targetType: 'ALL' }
+            ]
+        }).sort({ createdAt: -1 });
         res.json({ success: true, count: notifications.length, data: notifications });
     } catch (error) {
         next(error);
@@ -59,33 +64,33 @@ exports.markAsRead = async (req, res, next) => {
 
 exports.createNotification = async (req, res, next) => {
     try {
-        const { customer_id, title, message, type } = req.body;
+        const { targetType, targetId, customer_id, title, message, type } = req.body;
 
-        if (customer_id && customer_id !== 'ALL') {
+        // Support both legacy customer_id and new targetType/targetId params
+        const recipientId = targetId || customer_id;
+        const isAllBroadcast = targetType === 'ALL' || !recipientId || recipientId === 'ALL';
+
+        if (isAllBroadcast) {
+            // Store ONE record — no per-customer duplicates in admin view
             const notification = await Notification.create({
-                customerId: customer_id,
+                customerId: null,
+                targetType: 'ALL',
                 title,
                 message,
-                type: type || 'INFO'
+                type: type || 'INFO',
+                sentByAdmin: true
             });
-            return res.status(201).json({ success: true, message: 'Notification Sent', data: notification });
+            return res.status(201).json({ success: true, message: 'Notification broadcasted to all customers', data: notification });
         } else {
-            // Global broadcast to all registered customers
-            const customers = await Customer.find({ isActive: true });
-            
-            if (customers.length === 0) {
-                return res.status(400).json({ success: false, message: 'No active customers found to notify' });
-            }
-
-            const notifications = customers.map(cust => ({
-                customerId: cust._id,
+            const notification = await Notification.create({
+                customerId: recipientId,
+                targetType: 'CUSTOMER',
                 title,
                 message,
-                type: type || 'INFO'
-            }));
-            
-            await Notification.insertMany(notifications);
-            return res.status(201).json({ success: true, message: `Notification broadcasted to ${customers.length} customers` });
+                type: type || 'INFO',
+                sentByAdmin: true
+            });
+            return res.status(201).json({ success: true, message: 'Notification sent to customer', data: notification });
         }
     } catch (error) {
         next(error);
@@ -94,11 +99,12 @@ exports.createNotification = async (req, res, next) => {
 
 exports.getAllNotifications = async (req, res, next) => {
     try {
-        const results = await Notification.find()
-            .populate('customerId', 'name email')
+        // Only return admin-sent master records (no per-customer delivery duplicates)
+        const results = await Notification.find({ sentByAdmin: true })
+            .populate('customerId', 'fullName email')
             .sort({ createdAt: -1 })
             .limit(100);
-            
+
         res.json({ success: true, count: results.length, data: results });
     } catch (error) {
         next(error);

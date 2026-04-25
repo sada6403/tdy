@@ -22,11 +22,14 @@ const Settings = () => {
     const [profileData, setProfileData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
+    const [photoError, setPhotoError] = useState(false);
     const fileInputRef = useRef(null);
 
     // Support Form State
-    const [supportForm, setSupportForm] = useState({ subject: '', message: '' });
+    const [supportForm, setSupportForm] = useState({ subject: 'General Inquiry', message: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [supportSuccess, setSupportSuccess] = useState('');
+    const [supportError, setSupportError] = useState('');
 
     // Password Change State
     const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -41,6 +44,7 @@ const Settings = () => {
                 const res = await api.get('/customer/profile');
                 if (res.success) {
                     setProfileData(res.data);
+                    setPhotoError(false); // Reset error state on fresh data
                 }
             } catch (error) {
                 console.error("Fetch Error:", error);
@@ -91,6 +95,31 @@ const Settings = () => {
         }
     };
 
+    const handleSupportSubmit = async (e) => {
+        e.preventDefault();
+        if (!supportForm.message.trim()) {
+            setSupportError('Please enter a message.');
+            return;
+        }
+        setIsSubmitting(true);
+        setSupportError('');
+        setSupportSuccess('');
+        try {
+            const res = await api.post('/customer/support', {
+                subject: supportForm.subject,
+                message: supportForm.message,
+            });
+            if (res.success) {
+                setSupportSuccess('Your request has been submitted. We will respond shortly.');
+                setSupportForm({ subject: 'General Inquiry', message: '' });
+            }
+        } catch (err) {
+            setSupportError(err.message || 'Failed to submit. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     const handlePhotoChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -108,6 +137,7 @@ const Settings = () => {
                 const newPhoto = res.photoUrl;
                 updateProfile({ photoUrl: newPhoto });
                 setProfileData(prev => ({ ...prev, photoUrl: newPhoto }));
+                setPhotoError(false);
             }
         } catch (error) {
             console.error("Upload Error:", error);
@@ -207,50 +237,114 @@ const Settings = () => {
                     
                     {/* 👤 PROFILE SECTION */}
                     {activeSection === 'profile' && (
-                        <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
+                        <div className="space-y-5 animate-in slide-in-from-right-4 duration-500">
+
+                            {/* ── Header Card ── */}
                             <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 sm:p-8 shadow-sm">
                                 <div className="flex flex-col sm:flex-row items-center gap-8">
-                                    <div className="relative group">
-                                        <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-slate-50 overflow-hidden shadow-inner bg-slate-50 flex items-center justify-center">
-                                            {profileData?.photoUrl ? (
-                                                <img src={profileData.photoUrl} alt="P" className="w-full h-full object-cover" />
+
+                                    {/* Photo */}
+                                    <div className="relative shrink-0">
+                                        <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#F1F5F9] overflow-hidden shadow-md bg-[#F1F5F9] flex items-center justify-center">
+                                            {profileData?.photoUrl && !photoError ? (
+                                                <img
+                                                    src={profileData.photoUrl}
+                                                    alt="Profile"
+                                                    className="w-full h-full object-cover"
+                                                    onError={() => setPhotoError(true)}
+                                                />
                                             ) : (
-                                                <div className="w-full h-full bg-[#16A34A] flex items-center justify-center text-white text-3xl font-black">
-                                                    {displayName.charAt(0)}
+                                                <div className="w-full h-full bg-gradient-to-br from-[#16A34A] to-[#15803D] flex items-center justify-center text-white text-4xl font-black select-none">
+                                                    {displayName.charAt(0).toUpperCase()}
                                                 </div>
                                             )}
                                             {isUploading && (
-                                                <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                                                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#16A34A]"></div>
+                                                <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center rounded-full">
+                                                    <div className="animate-spin rounded-full h-7 w-7 border-2 border-[#16A34A] border-t-transparent"></div>
                                                 </div>
                                             )}
                                         </div>
-                                        <button 
+                                        <button
                                             onClick={() => fileInputRef.current?.click()}
-                                            className="absolute bottom-1 right-1 p-2 bg-[#16A34A] text-white rounded-full shadow-lg border-2 border-white hover:scale-110 transition-transform"
+                                            className="absolute bottom-1 right-1 p-2.5 bg-[#16A34A] text-white rounded-full shadow-lg border-2 border-white hover:scale-110 transition-transform"
+                                            title="Change photo"
                                         >
-                                            <Camera size={14} />
+                                            <Camera size={13} />
                                         </button>
                                         <input type="file" ref={fileInputRef} onChange={handlePhotoChange} className="hidden" accept="image/*" />
                                     </div>
+
+                                    {/* Name / ID / Actions */}
                                     <div className="text-center sm:text-left flex-1 min-w-0">
-                                        <h2 className="text-2xl font-semibold text-[#0F172A] tracking-tight truncate max-w-full">
-                                            {displayName}
-                                        </h2>
-                                        <p className="text-sm text-[#64748B] mt-1 break-words">{displayEmail}</p>
-                                        <p className="text-xs text-[#94A3B8] font-medium mt-2">{displayPhone}</p>
-                                        
-                                        <div className="mt-8 flex flex-wrap justify-center sm:justify-start gap-4">
-                                             <button className="px-6 py-2.5 bg-[#16A34A] text-white text-xs font-semibold rounded-xl hover:bg-[#15803D] transition-all shadow-sm">Edit Profile</button>
-                                             <button 
-                                                 onClick={() => setShowPasswordModal(true)}
-                                                 className="px-6 py-2.5 bg-white border border-[#E5E7EB] text-[#0F172A] text-xs font-semibold rounded-xl hover:bg-[#F8FAFC] transition-all"
-                                             >
-                                                 Change Password
-                                             </button>
-                                         </div>
-                                     </div>
-                                 </div>
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
+                                            <h2 className="text-2xl font-bold text-[#0F172A] truncate">{displayName}</h2>
+                                            <span className={`self-center sm:self-auto px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shrink-0 ${profileData?.adminApproved ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                                                {profileData?.adminApproved ? '● KYC Verified' : '● Pending Verification'}
+                                            </span>
+                                        </div>
+                                        <p className="text-sm text-[#64748B]">{displayEmail}</p>
+                                        <p className="text-xs text-[#94A3B8] font-medium mt-0.5">{displayPhone}</p>
+                                        <p className="text-[10px] text-[#CBD5E1] font-mono mt-1 uppercase tracking-widest">Member ID: {profileData?.userId || 'N/A'}</p>
+
+                                        <div className="mt-6 flex flex-wrap justify-center sm:justify-start gap-3">
+                                            <button className="px-6 py-2.5 bg-[#16A34A] text-white text-xs font-semibold rounded-xl hover:bg-[#15803D] transition-all shadow-sm">
+                                                Edit Profile
+                                            </button>
+                                            <button
+                                                onClick={() => setShowPasswordModal(true)}
+                                                className="px-6 py-2.5 bg-white border border-[#E5E7EB] text-[#0F172A] text-xs font-semibold rounded-xl hover:bg-[#F8FAFC] transition-all"
+                                            >
+                                                Change Password
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* ── Info Grid ── */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+                                {/* Personal Info */}
+                                <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm">
+                                    <p className="text-[9px] font-black text-[#94A3B8] uppercase tracking-widest mb-5">Personal Information</p>
+                                    <div className="space-y-4">
+                                        <ProfileField label="Full Name" value={displayName} />
+                                        <ProfileField label="NIC / National ID" value={profileData?.nic || 'N/A'} />
+                                        <ProfileField label="Date of Birth" value={profileData?.dob ? new Date(profileData.dob).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) : 'N/A'} />
+                                        <ProfileField label="Gender" value={profileData?.gender ? profileData.gender.charAt(0).toUpperCase() + profileData.gender.slice(1).toLowerCase() : 'N/A'} />
+                                    </div>
+                                </div>
+
+                                {/* Contact Info */}
+                                <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm">
+                                    <p className="text-[9px] font-black text-[#94A3B8] uppercase tracking-widest mb-5">Contact Details</p>
+                                    <div className="space-y-4">
+                                        <ProfileField label="Email Address" value={displayEmail} />
+                                        <ProfileField label="Mobile Number" value={displayPhone} />
+                                        <ProfileField label="Residential Address" value={
+                                            typeof profileData?.address === 'string' && profileData.address
+                                                ? profileData.address
+                                                : profileData?.address?.line1 || profileData?.address?.city
+                                                    ? [profileData.address.line1, profileData.address.city, profileData.address.district].filter(Boolean).join(', ')
+                                                    : ''
+                                        } multiline />
+                                    </div>
+                                </div>
+
+                                {/* Bank Details — full width */}
+                                <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm lg:col-span-2">
+                                    <p className="text-[9px] font-black text-[#94A3B8] uppercase tracking-widest mb-5">Bank Account Details</p>
+                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                                        <ProfileField label="Bank Name" value={profileData?.bankName || 'N/A'} />
+                                        <ProfileField label="Branch" value={profileData?.branchName || 'N/A'} />
+                                        <ProfileField label="Account Holder" value={profileData?.accountHolder || 'N/A'} />
+                                        <ProfileField label="Account Number" value={
+                                            profileData?.accountNumber
+                                                ? '•••• •••• ' + String(profileData.accountNumber).slice(-4)
+                                                : 'N/A'
+                                        } />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -262,7 +356,7 @@ const Settings = () => {
                                 <legend className="text-base font-semibold text-[#0F172A] mb-8">Theme Preferences</legend>
                                 <div className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-2xl border border-[#E5E7EB]">
                                     <div className="flex items-center gap-4">
-                                        <div className={`p-2.5 rounded-xl ${theme === 'dark' ? 'bg-[#0F172A] text-white' : 'bg-white text-amber-500 shadow-sm border border-[#E5E7EB]'}`}>
+                                        <div className={`p-2.5 rounded-xl ${theme === 'dark' ? 'bg-slate-700 text-white' : 'bg-white text-amber-500 shadow-sm border border-[#E5E7EB]'}`}>
                                             {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
                                         </div>
                                         <div>
@@ -270,9 +364,9 @@ const Settings = () => {
                                             <p className="text-[10px] text-[#64748B] uppercase tracking-widest font-black mt-0.5">System Visual Protocol</p>
                                         </div>
                                     </div>
-                                    
+
                                     {/* Toggle Switch */}
-                                    <button 
+                                    <button
                                         onClick={toggleTheme}
                                         className={`w-12 h-6 rounded-full relative transition-colors ${theme === 'dark' ? 'bg-[#16A34A]' : 'bg-[#E5E7EB]'}`}
                                     >
@@ -366,6 +460,53 @@ const Settings = () => {
                     {/* 🆘 SUPPORT SECTION */}
                     {activeSection === 'support' && (
                         <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
+
+                            {/* Assigned Agent Card */}
+                            {profileData?.agent ? (
+                                <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center">
+                                            <User size={20} />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-black text-emerald-700 uppercase tracking-widest">Your Assigned Field Agent</p>
+                                            <p className="text-[11px] text-emerald-600 mt-0.5">Your personal point of contact at NF Plantation</p>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <div className="bg-white rounded-xl p-4 border border-emerald-100">
+                                            <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Agent Name</p>
+                                            <p className="text-sm font-bold text-[#0F172A]">{profileData.agent.name}</p>
+                                            <p className="text-[10px] text-emerald-600 font-bold mt-0.5">{profileData.agent.designation || 'Field Agent'}</p>
+                                        </div>
+                                        <div className="bg-white rounded-xl p-4 border border-emerald-100">
+                                            <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Mobile Number</p>
+                                            <a href={`tel:${profileData.agent.contact}`} className="text-sm font-bold text-emerald-700 hover:underline flex items-center gap-1">
+                                                <Phone size={13} /> {profileData.agent.contact}
+                                            </a>
+                                        </div>
+                                        {profileData.agent.email && (
+                                            <div className="bg-white rounded-xl p-4 border border-emerald-100">
+                                                <p className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Email Address</p>
+                                                <a href={`mailto:${profileData.agent.email}`} className="text-sm font-bold text-emerald-700 hover:underline flex items-center gap-1 truncate">
+                                                    <Mail size={13} /> {profileData.agent.email}
+                                                </a>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="bg-[#F8FAFC] border border-[#E5E7EB] rounded-2xl p-5 flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-[#E2E8F0] rounded-xl flex items-center justify-center text-[#94A3B8]">
+                                        <User size={20} />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-[#475569]">No field agent assigned yet</p>
+                                        <p className="text-xs text-[#94A3B8] mt-0.5">Our team will assign a dedicated agent to your account shortly.</p>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Support Contacts */}
                                 <div className="bg-white border border-[#E5E7EB] rounded-2xl p-8 shadow-sm">
@@ -380,26 +521,44 @@ const Settings = () => {
                                 {/* Support Form */}
                                 <div className="bg-white border border-[#E5E7EB] rounded-2xl p-8 shadow-sm">
                                     <h3 className="text-base font-semibold text-[#0F172A] mb-8 uppercase tracking-widest text-xs">Service Request</h3>
-                                    <form className="space-y-4">
+                                    <form className="space-y-4" onSubmit={handleSupportSubmit}>
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">Subject</label>
-                                            <select className="w-full h-11 bg-[#F8FAFC] border border-[#E5E7EB] rounded-xl px-4 text-sm text-[#0F172A] focus:ring-1 focus:ring-[#16A34A] outline-none">
+                                            <select
+                                                value={supportForm.subject}
+                                                onChange={e => setSupportForm(p => ({ ...p, subject: e.target.value }))}
+                                                className="w-full h-11 bg-[#F8FAFC] border border-[#E5E7EB] rounded-xl px-4 text-sm text-[#0F172A] focus:ring-1 focus:ring-[#16A34A] outline-none"
+                                            >
                                                 <option>General Inquiry</option>
                                                 <option>Technical Issue</option>
                                                 <option>Investment Assistance</option>
                                                 <option>Profile Update Request</option>
+                                                <option>Withdrawal Support</option>
                                             </select>
                                         </div>
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">Message</label>
-                                            <textarea 
+                                            <textarea
                                                 rows="5"
-                                                placeholder="how can we help you?"
+                                                placeholder="How can we help you?"
+                                                value={supportForm.message}
+                                                onChange={e => setSupportForm(p => ({ ...p, message: e.target.value }))}
                                                 className="w-full bg-[#F8FAFC] border border-[#E5E7EB] rounded-xl p-4 text-sm text-[#0F172A] focus:ring-1 focus:ring-[#16A34A] outline-none resize-none placeholder:text-[#94A3B8]"
-                                            ></textarea>
+                                            />
                                         </div>
-                                        <button className="w-full sm:w-auto h-11 px-8 bg-[#16A34A] text-white text-xs font-semibold rounded-xl hover:bg-[#15803D] transition-all flex items-center justify-center gap-2">
-                                            <Send size={14} /> Send Message
+                                        {supportSuccess && (
+                                            <p className="text-xs font-bold text-[#16A34A] bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">{supportSuccess}</p>
+                                        )}
+                                        {supportError && (
+                                            <p className="text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">{supportError}</p>
+                                        )}
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="w-full sm:w-auto h-11 px-8 bg-[#16A34A] text-white text-xs font-semibold rounded-xl hover:bg-[#15803D] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                                        >
+                                            {isSubmitting ? <span className="animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full" /> : <Send size={14} />}
+                                            {isSubmitting ? 'Sending...' : 'Send Message'}
                                         </button>
                                     </form>
                                 </div>
@@ -550,6 +709,22 @@ const SecurityRow = ({ icon: Icon, title, desc, onClick, status }) => (
         </div>
     </div>
 );
+
+const ProfileField = ({ label, value, multiline = false }) => {
+    let display = value;
+    if (value && typeof value === 'object') {
+        // Object slipped through (e.g. address sub-document) — stringify gracefully
+        display = Object.values(value).filter(v => v && typeof v === 'string').join(', ');
+    }
+    return (
+        <div>
+            <p className="text-[9px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">{label}</p>
+            <p className={`text-sm font-semibold text-[#0F172A] ${multiline ? 'leading-relaxed' : 'truncate'}`}>
+                {display || 'N/A'}
+            </p>
+        </div>
+    );
+};
 
 const ContactItem = ({ icon: Icon, label, value }) => (
     <div className="flex items-center gap-4">

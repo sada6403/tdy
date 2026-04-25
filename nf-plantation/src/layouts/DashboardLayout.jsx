@@ -129,7 +129,7 @@ const DashboardLayout = () => {
     ];
 
     if (loading) return (
-        <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC]">
+        <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] dark:bg-[#0F172A]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#16A34A]"></div>
         </div>
     );
@@ -137,7 +137,7 @@ const DashboardLayout = () => {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] flex flex-col md:flex-row font-['Inter',_sans-serif] overflow-x-hidden">
+        <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0F172A] flex flex-col md:flex-row font-['Inter',_sans-serif] overflow-x-hidden">
             
             {/* --- SIDEBAR --- */}
             <motion.aside 
@@ -218,17 +218,17 @@ const DashboardLayout = () => {
             <div className={`flex-1 w-full min-w-0 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'md:ml-64' : 'md:ml-20'}`}>
                 
                 {/* --- TOP HEADER --- */}
-                <header className="sticky top-0 z-50 h-[60px] bg-white border-b border-slate-200 shadow-sm flex items-center justify-between px-6">
+                <header className="sticky top-0 z-50 h-[60px] bg-white dark:bg-[#1E293B] border-b border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between px-6">
                     <div className="flex items-center gap-4">
-                        <button 
+                        <button
                             onClick={() => setIsMobileSidebarOpen(true)}
-                            className="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+                            className="md:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
                         >
                             <Menu size={24} />
                         </button>
-                        <h2 className="text-slate-400 text-sm font-medium hidden md:block">
-                            Dashboard <span className="mx-2 text-slate-300">/</span> 
-                            <span className="text-[#0F172A] font-semibold">
+                        <h2 className="text-slate-400 dark:text-slate-500 text-sm font-medium hidden md:block">
+                            Dashboard <span className="mx-2 text-slate-300 dark:text-slate-600">/</span>
+                            <span className="text-[#0F172A] dark:text-slate-100 font-semibold">
                                 {menuItems.find(i => location.pathname === i.path)?.name || 
                                  (location.pathname.includes('fd-activation') ? 'Plan Activation' : 
                                   location.pathname.includes('profile') ? 'Profile' :
@@ -239,7 +239,7 @@ const DashboardLayout = () => {
                         </h2>
                         {/* Mobile Brand Name */}
                         <div className="md:hidden flex flex-col">
-                             <span className="text-[11px] font-black tracking-tighter leading-none text-[#0F172A]">NF PLANTATION</span>
+                             <span className="text-[11px] font-black tracking-tighter leading-none text-[#0F172A] dark:text-white">NF PLANTATION</span>
                              <span className="text-[8px] font-bold text-[#16A34A] uppercase tracking-widest">Portal</span>
                         </div>
                     </div>
@@ -253,30 +253,30 @@ const DashboardLayout = () => {
 
                         {/* Notifications */}
                         <div className="relative" ref={notificationRef}>
-                            <button 
+                            <button
                                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                                className="w-10 h-10 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-all relative"
+                                className="w-10 h-10 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all relative"
                             >
                                 <Bell size={22} />
                                 {unreadCount > 0 && (
-                                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-800"></span>
                                 )}
                             </button>
                             {/* Notification Dropdown */}
                             {isNotificationOpen && (
-                                <div className="fixed md:absolute top-[64px] md:top-full left-0 md:left-auto right-0 md:mt-2 w-full md:w-96 bg-white md:rounded-2xl shadow-2xl md:shadow-xl border-b md:border border-slate-100 z-[110] animate-in fade-in slide-in-from-top-2 overflow-hidden">
-                                    <div className="p-4 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
-                                        <span className="text-xs font-bold text-[#0F172A] uppercase tracking-wider">Notifications</span>
+                                <div className="fixed md:absolute top-[64px] md:top-full left-0 md:left-auto right-0 md:mt-2 w-full md:w-96 bg-white dark:bg-[#1E293B] md:rounded-2xl shadow-2xl md:shadow-xl border-b md:border border-slate-100 dark:border-slate-700 z-[110] animate-in fade-in slide-in-from-top-2 overflow-hidden">
+                                    <div className="p-4 border-b border-slate-50 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-700/30">
+                                        <span className="text-xs font-bold text-[#0F172A] dark:text-slate-100 uppercase tracking-wider">Notifications</span>
                                         <Link to="/company/nf-plantation/dashboard/notifications" onClick={() => setIsNotificationOpen(false)} className="text-[10px] font-bold text-[#16A34A] hover:underline">VIEW ALL</Link>
                                     </div>
                                     <div className="max-h-80 overflow-y-auto">
                                         {notifications.length === 0 ? (
-                                            <div className="p-8 text-center text-slate-400 text-xs">No notifications yet</div>
+                                            <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-xs">No notifications yet</div>
                                         ) : (
                                             notifications.slice(0, 5).map(n => (
-                                                <div key={n._id} className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                                                    <p className="text-xs font-bold text-slate-900 line-clamp-1">{n.title}</p>
-                                                    <p className="text-[10px] text-slate-500 mt-1 line-clamp-2">{n.message}</p>
+                                                <div key={n._id} className="p-4 border-b border-slate-50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                                    <p className="text-xs font-bold text-slate-900 dark:text-slate-100 line-clamp-1">{n.title}</p>
+                                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{n.message}</p>
                                                 </div>
                                             ))
                                         )}
@@ -287,13 +287,13 @@ const DashboardLayout = () => {
 
                         {/* Profile Link (Direct to Settings) */}
                         <div className="relative">
-                            <Link 
+                            <Link
                                 to="/company/nf-plantation/dashboard/settings"
-                                className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-full border border-slate-200 hover:bg-slate-50 transition-all group"
+                                className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all group"
                             >
                                 <div className="hidden sm:block text-right">
-                                    <p className="text-xs font-black text-[#0F172A] tracking-tighter uppercase leading-none group-hover:text-[#16A34A] transition-colors">{user?.name || 'User'}</p>
-                                    <p className="text-[9px] text-slate-400 mt-1 font-bold uppercase tracking-widest">{user?.userId || 'GUEST-ID'}</p>
+                                    <p className="text-xs font-black text-[#0F172A] dark:text-white tracking-tighter uppercase leading-none group-hover:text-[#16A34A] transition-colors">{user?.name || 'User'}</p>
+                                    <p className="text-[9px] text-slate-400 dark:text-slate-500 mt-1 font-bold uppercase tracking-widest">{user?.userId || 'GUEST-ID'}</p>
                                 </div>
                                 <div className="w-8 h-8 rounded-full bg-[#16A34A] flex items-center justify-center text-white font-bold text-xs border-2 border-white shadow-sm overflow-hidden group-hover:scale-105 transition-transform">
                                     {user?.photoUrl ? <img src={user.photoUrl} alt="U" className="w-full h-full object-cover" /> : (user?.name?.charAt(0) || 'U')}
@@ -304,12 +304,12 @@ const DashboardLayout = () => {
                 </header>
 
                 {/* --- MAIN PAGE CONTENT --- */}
-                <main className="p-4 sm:p-8 min-h-[calc(100vh-60px)] bg-[#F8FAFC]">
+                <main className="p-4 sm:p-8 min-h-[calc(100vh-60px)] bg-[#F8FAFC] dark:bg-[#0F172A]">
                     <Outlet />
                 </main>
 
                 {/* --- MOBILE BOTTOM NAVIGATION --- */}
-                <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-t border-slate-200 px-6 pb-6 pt-3 flex justify-between items-center shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+                <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/80 dark:bg-[#1E293B]/90 backdrop-blur-xl border-t border-slate-200 dark:border-slate-700 px-6 pb-6 pt-3 flex justify-between items-center shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
                     {[
                         { icon: LayoutDashboard, path: '/company/nf-plantation/dashboard', label: 'Home' },
                         { icon: Wallet, path: '/company/nf-plantation/dashboard/wallet', label: 'Wallet' },
@@ -345,20 +345,20 @@ const DashboardLayout = () => {
                             setShowExitConfirm(false);
                         }}
                     ></div>
-                    <div className="relative bg-white rounded-[2rem] p-8 md:p-10 max-w-md w-full text-center shadow-2xl border border-slate-100 animate-in zoom-in duration-300">
-                        <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div className="relative bg-white dark:bg-[#1E293B] rounded-[2rem] p-8 md:p-10 max-w-md w-full text-center shadow-2xl border border-slate-100 dark:border-slate-700 animate-in zoom-in duration-300">
+                        <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
                             <Shield size={32} />
                         </div>
-                        <h3 className="text-2xl font-bold text-[#0F172A] mb-3">Confirm Dashboard Exit?</h3>
-                        <p className="text-slate-500 mb-8 text-sm leading-relaxed">
+                        <h3 className="text-2xl font-bold text-[#0F172A] dark:text-white mb-3">Confirm Dashboard Exit?</h3>
+                        <p className="text-slate-500 dark:text-slate-400 mb-8 text-sm leading-relaxed">
                             You are about to leave your secure dashboard session. For your security, please confirm if you want to return to the public website.
                         </p>
                         <div className="grid grid-cols-2 gap-4">
-                            <button 
+                            <button
                                 onClick={() => {
                                     setShowExitConfirm(false);
                                 }}
-                                className="py-4 px-6 rounded-2xl bg-slate-100 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
+                                className="py-4 px-6 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs uppercase tracking-wider hover:bg-slate-200 dark:hover:bg-slate-600 transition-all"
                             >
                                 No, Stay
                             </button>
@@ -377,16 +377,16 @@ const DashboardLayout = () => {
             {showLogoutConfirm && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
                     <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm shadow-xl" onClick={() => setShowLogoutConfirm(false)}></div>
-                    <div className="relative bg-white rounded-[2rem] p-8 md:p-10 max-w-md w-full text-center shadow-2xl border border-slate-100 animate-in zoom-in duration-300">
-                        <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div className="relative bg-white dark:bg-[#1E293B] rounded-[2rem] p-8 md:p-10 max-w-md w-full text-center shadow-2xl border border-slate-100 dark:border-slate-700 animate-in zoom-in duration-300">
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle size={32} />
                         </div>
-                        <h3 className="text-2xl font-bold text-[#0F172A] mb-3">Confirm Logout?</h3>
-                        <p className="text-slate-500 mb-8 text-sm">Are you sure you want to end your session? You will need to log in again to access your dashboard.</p>
+                        <h3 className="text-2xl font-bold text-[#0F172A] dark:text-white mb-3">Confirm Logout?</h3>
+                        <p className="text-slate-500 dark:text-slate-400 mb-8 text-sm">Are you sure you want to end your session? You will need to log in again to access your dashboard.</p>
                         <div className="grid grid-cols-2 gap-4">
-                            <button 
+                            <button
                                 onClick={() => setShowLogoutConfirm(false)}
-                                className="py-3 px-6 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
+                                className="py-3 px-6 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs uppercase tracking-wider hover:bg-slate-200 dark:hover:bg-slate-600 transition-all"
                             >
                                 Stay
                             </button>

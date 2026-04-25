@@ -7,12 +7,16 @@ const UserSchema = new mongoose.Schema({
   userId: { type: String, unique: true, sparse: true, index: true },
   phone: { type: String },
   password: { type: String, required: true },
-  role: { type: String, enum: ['ADMIN', 'CUSTOMER', 'STAFF'], required: true, default: 'STAFF' },
+  role: { type: String, enum: ['ADMIN', 'BRANCH_ADMIN', 'CUSTOMER', 'STAFF'], required: true, default: 'STAFF' },
+  isSuperAdmin: { type: Boolean, default: false },
+  branchId: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', default: null },
   isActive: { type: Boolean, default: true },
   loginAttempts: { type: Number, default: 0 },
   lockoutUntil: { type: Date },
   mustChangePassword: { type: Boolean, default: false },
   customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
+  photoUrl: { type: String, default: '' },
+  lastSeen: { type: Date, default: null },
   createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 

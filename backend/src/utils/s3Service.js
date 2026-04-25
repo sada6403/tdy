@@ -183,10 +183,30 @@ const getImageBase64FromS3 = async (urlOrKey) => {
     }
 };
 
+const uploadBranch = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: process.env.AWS_S3_BUCKET_NAME,
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        key: function (req, file, cb) {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const key = 'branches/' + uniqueSuffix + path.extname(file.originalname);
+            cb(null, key);
+        }
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const allowed = new Set(['image/jpeg', 'image/jpg', 'image/png', 'image/webp']);
+        if (!allowed.has(file.mimetype)) return cb(new Error('Only JPEG, PNG, and WEBP allowed'));
+        cb(null, true);
+    },
+});
+
 module.exports = {
     s3,
     upload,
     uploadMarketing,
+    uploadBranch,
     uploadSignatureToS3,
     finalizeS3File,
     getImageBase64FromS3

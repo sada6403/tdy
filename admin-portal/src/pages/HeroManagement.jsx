@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { 
     Plus, Edit2, Trash2, CheckCircle, XCircle, 
     ArrowUp, ArrowDown, Image as ImageIcon, Sparkles, Monitor, Tablet,
-    Layout, Save, X, Eye, EyeOff, ShieldCheck
+    Layout, Save, X, Eye, EyeOff, ShieldCheck, Globe, PlayCircle
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { adminHeroService } from '../services/api/adminHero';
 
 const HeroManagement = () => {
@@ -190,15 +191,58 @@ const HeroManagement = () => {
         };
         reader.readAsDataURL(file);
     };
-
     return (
-        <div style={{ padding: '40px' }}>
+        <div style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            {/* Sub-navigation Tabs */}
+            <div style={{ 
+                display: 'flex', 
+                gap: '8px', 
+                backgroundColor: '#f1f5f9', 
+                padding: '6px', 
+                borderRadius: '16px',
+                width: 'fit-content'
+            }}>
+                <Link to="/website-settings" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    color: '#64748b',
+                    transition: 'all 0.2s'
+                }}>
+                    General Settings
+                </Link>
+                <Link to="/hero-management" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    textDecoration: 'none',
+                    backgroundColor: 'white',
+                    color: 'var(--primary)',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}>
+                    Hero Management
+                </Link>
+                <Link to="/events-management" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    color: '#64748b',
+                    transition: 'all 0.2s'
+                }}>
+                    Events & Media
+                </Link>
+            </div>
+
             {/* Header */}
             <div style={{ 
                 display: 'flex', 
                 justifyContent: 'space-between', 
                 alignItems: 'center', 
-                marginBottom: '40px',
                 backgroundColor: 'white',
                 padding: '32px',
                 borderRadius: '24px',

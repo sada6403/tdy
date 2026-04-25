@@ -1,24 +1,63 @@
-import { useState } from 'react';
-import { 
-  Settings, Building2, Layout, Zap, Bell, Shield, 
-  Save, X, Plus, Trash2, Edit3, Image, 
+import { useState, useEffect } from 'react';
+import {
+  Settings, Building2, Layout, Zap, Bell, Shield,
+  Save, X, Plus, Trash2, Edit3, Image, FileText,
   Mail, Phone, Clock, MapPin, Globe, Loader2,
-  Lock, Key, LifeBuoy, CheckCircle2, AlertTriangle, ExternalLink
+  Lock, Key, LifeBuoy, CheckCircle2, AlertTriangle, ExternalLink,
+  Activity, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { plansService } from '../services/api/adminPlans';
-import { useEffect } from 'react';
+import { auditService } from '../services/api/adminAudit';
+
+const ACTION_COLOR = {
+    PROFIT_PAYOUT_EXECUTED: '#8b5cf6',
+    INVESTMENT_APPROVED: '#10b981',
+    INVESTMENT_REJECTED: '#ef4444',
+    DEPOSIT_APPROVED: '#10b981',
+    DEPOSIT_REJECTED: '#ef4444',
+    WITHDRAWAL_APPROVED: '#10b981',
+    WITHDRAWAL_REJECTED: '#ef4444',
+    WITHDRAWAL_COMPLETED: '#2563eb',
+    CUSTOMER_APPROVED: '#10b981',
+    CUSTOMER_STATUS_UPDATED: '#f59e0b',
+    DEFAULT: '#64748b'
+};
+
+const getActionColor = (action) => ACTION_COLOR[action] || ACTION_COLOR.DEFAULT;
+
+const formatAction = (action) =>
+    action?.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) || 'Unknown Action';
 
 const SettingsPage = () => {
-  const [activeTab, setActiveTab] = useState('company'); // 'company', 'content', 'plans', 'notifications', 'security'
+  const [activeTab, setActiveTab] = useState('company');
   const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState([]);
   const [plansLoading, setPlansLoading] = useState(false);
+  const [activityLogs, setActivityLogs] = useState([]);
+  const [activityLoading, setActivityLoading] = useState(false);
+  const [activityPage, setActivityPage] = useState(1);
+  const [activityPagination, setActivityPagination] = useState({ total: 0, pages: 1 });
 
   useEffect(() => {
-    if (activeTab === 'plans') {
-        loadPlans();
-    }
+    if (activeTab === 'plans') loadPlans();
+    if (activeTab === 'activity') loadActivityLog(1);
   }, [activeTab]);
+
+  const loadActivityLog = async (page = 1) => {
+    setActivityLoading(true);
+    try {
+        const res = await auditService.getAuditLogs({ page, limit: 20 });
+        if (res.success) {
+            setActivityLogs(res.data);
+            setActivityPagination(res.pagination);
+            setActivityPage(page);
+        }
+    } catch (err) {
+        console.error('Failed to load activity log', err);
+    } finally {
+        setActivityLoading(false);
+    }
+  };
 
   const loadPlans = async () => {
     setPlansLoading(true);
@@ -79,6 +118,7 @@ const SettingsPage = () => {
              { id: 'plans', label: 'Investment Plans', icon: <Zap size={18} /> },
              { id: 'notifications', label: 'Email & Notification', icon: <Bell size={18} /> },
              { id: 'security', label: 'Security & Access', icon: <Shield size={18} /> },
+             { id: 'activity', label: 'Activity Timeline', icon: <Activity size={18} /> },
            ].map((tab) => (
              <button 
                key={tab.id}
@@ -274,13 +314,133 @@ const SettingsPage = () => {
                       ))}
                    </div>
                 </div>
-                
+
                 <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#fff1f2', border: '1px solid #fecaca', display: 'flex', gap: '12px' }}>
                    <AlertTriangle size={20} color="#dc2626" style={{ flexShrink: 0 }} />
                    <p style={{ fontSize: '12px', color: '#991b1b', fontWeight: '700' }}>
                      Sensitive security changes will invalidate all active sessions immediately and force an administrative re-authentication.
                    </p>
                 </div>
+             </div>
+           )}
+
+           {activeTab === 'activity' && (
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+               {/* Header row */}
+               <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 24px' }}>
+                 <div>
+                   <h3 style={{ fontSize: '16px', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                     <Activity size={18} color="var(--primary)" /> Admin Activity Timeline
+                   </h3>
+                   <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '3px', fontWeight: '600' }}>
+                     Auto-recorded system events — read-only audit trail
+                   </p>
+                 </div>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#64748b', fontWeight: '700' }}>
+                   <span style={{ padding: '4px 12px', borderRadius: '20px', backgroundColor: '#f1f5f9' }}>
+                     {activityPagination.total} Events
+                   </span>
+                 </div>
+               </div>
+
+               {activityLoading ? (
+                 <div style={{ textAlign: 'center', padding: '60px' }}>
+                   <Loader2 size={28} className="animate-spin" style={{ color: 'var(--primary)', margin: '0 auto 12px' }} />
+                   <p style={{ color: '#94a3b8', fontWeight: '600', fontSize: '13px' }}>Loading activity log...</p>
+                 </div>
+               ) : activityLogs.length === 0 ? (
+                 <div className="card" style={{ padding: '60px', textAlign: 'center' }}>
+                   <Activity size={36} style={{ color: '#e2e8f0', margin: '0 auto 12px' }} />
+                   <p style={{ color: '#94a3b8', fontWeight: '700', fontSize: '14px' }}>No activity recorded yet.</p>
+                 </div>
+               ) : (
+                 <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                   {/* Timeline */}
+                   <div style={{ padding: '8px 0' }}>
+                     {activityLogs.map((log, i) => {
+                       const color = getActionColor(log.action);
+                       const ts = new Date(log.createdAt);
+                       const dateStr = ts.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+                       const timeStr = ts.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                       const actor = log.userId?.name || log.userId?.userId || 'System';
+                       return (
+                         <div key={log._id} style={{ display: 'flex', gap: '0', padding: '0 24px', borderBottom: i < activityLogs.length - 1 ? '1px solid #f8fafc' : 'none' }}>
+                           {/* Timeline line + dot */}
+                           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '32px', flexShrink: 0, paddingTop: '20px' }}>
+                             <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: color, border: '2px solid white', boxShadow: `0 0 0 2px ${color}30`, flexShrink: 0, zIndex: 1 }} />
+                             {i < activityLogs.length - 1 && <div style={{ width: '1px', flex: 1, backgroundColor: '#f1f5f9', marginTop: '4px', marginBottom: '0' }} />}
+                           </div>
+
+                           {/* Content */}
+                           <div style={{ flex: 1, padding: '16px 0 16px 16px' }}>
+                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap' }}>
+                               <div style={{ flex: 1 }}>
+                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                                   <span style={{ fontSize: '12px', fontWeight: '800', padding: '3px 10px', borderRadius: '20px', backgroundColor: `${color}15`, color: color }}>
+                                     {formatAction(log.action)}
+                                   </span>
+                                   {log.severity && log.severity !== 'INFO' && (
+                                     <span style={{ fontSize: '10px', fontWeight: '800', padding: '2px 8px', borderRadius: '20px', backgroundColor: log.severity === 'CRITICAL' ? '#fee2e2' : '#fef3c7', color: log.severity === 'CRITICAL' ? '#dc2626' : '#d97706' }}>
+                                       {log.severity}
+                                     </span>
+                                   )}
+                                 </div>
+                                 <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+                                   {log.target && (
+                                     <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '700' }}>
+                                       Target: <span style={{ color: '#1e293b' }}>{log.target}</span>
+                                     </span>
+                                   )}
+                                   {log.description && (
+                                     <span style={{ fontSize: '12px', color: '#64748b' }}>{log.description}</span>
+                                   )}
+                                   <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '600' }}>
+                                     By: <span style={{ color: '#475569' }}>{actor}</span>
+                                   </span>
+                                 </div>
+                                 {log.ipAddress && log.ipAddress !== 'SYSTEM' && (
+                                   <span style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
+                                     IP: {log.ipAddress}
+                                   </span>
+                                 )}
+                               </div>
+                               <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                                 <p style={{ fontSize: '12px', fontWeight: '700', color: '#475569' }}>{dateStr}</p>
+                                 <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{timeStr}</p>
+                               </div>
+                             </div>
+                           </div>
+                         </div>
+                       );
+                     })}
+                   </div>
+                 </div>
+               )}
+
+               {/* Pagination */}
+               {activityPagination.pages > 1 && (
+                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px' }}>
+                   <button
+                     onClick={() => loadActivityLog(activityPage - 1)}
+                     disabled={activityPage <= 1}
+                     className="card"
+                     style={{ padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', opacity: activityPage <= 1 ? 0.4 : 1 }}
+                   >
+                     <ChevronLeft size={16} /> Prev
+                   </button>
+                   <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '700' }}>
+                     Page {activityPage} of {activityPagination.pages}
+                   </span>
+                   <button
+                     onClick={() => loadActivityLog(activityPage + 1)}
+                     disabled={activityPage >= activityPagination.pages}
+                     className="card"
+                     style={{ padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', opacity: activityPage >= activityPagination.pages ? 0.4 : 1 }}
+                   >
+                     Next <ChevronRight size={16} />
+                   </button>
+                 </div>
+               )}
              </div>
            )}
 

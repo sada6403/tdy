@@ -22,6 +22,15 @@ const { getSafeSession, safeStartTransaction, safeCommitTransaction, safeAbortTr
 const profitEngineService = require('../services/ProfitService');
 const ProfitPayoutLog = require('../models/ProfitPayoutLog');
 
+// Safe month addition — prevents overflow (e.g. Jan 31 + 1 month = Feb 28, not Mar 3)
+function addMonths(date, months) {
+    const d = new Date(date);
+    const day = d.getDate();
+    d.setMonth(d.getMonth() + months, 1);
+    d.setDate(Math.min(day, new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()));
+    return d;
+}
+
 exports.getPayoutSchedules = async (req, res, next) => {
     try {
         const { status } = req.query; // PENDING, COMPLETED, or DUE
@@ -98,6 +107,37 @@ exports.runMonthlyPayouts = async (req, res, next) => {
         // Run daily payouts synchronously to wait for result and return metrics
         const results = await profitEngineService.processDailyPayouts();
         res.json({ success: true, message: 'Payout engine ran successfully', data: results });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getPayoutStats = async (req, res, next) => {
+    try {
+        const today = new Date();
+        const next7Days = new Date();
+        next7Days.setDate(today.getDate() + 7);
+        next7Days.setHours(23, 59, 59, 999);
+
+        // Find all active investments due in the next 7 days
+        const dueInvestments = await CustomerInvestment.find({
+            status: 'ACTIVE',
+            nextProfitDate: { $lte: next7Days }
+        });
+
+        const volumeNext7Days = dueInvestments.reduce((acc, inv) => {
+            // Use monthlyROI if present, otherwise approximate from monthlyProfit or default 0
+            const profitPerMonth = inv.monthlyProfit || (inv.investedAmount * ((inv.monthlyROI || 0) / 100));
+            return acc + profitPerMonth;
+        }, 0);
+
+        res.json({
+            success: true,
+            data: {
+                volumeNext7Days,
+                dueCount: dueInvestments.length
+            }
+        });
     } catch (error) {
         next(error);
     }
@@ -702,8 +742,23 @@ exports.getWithdrawalRequests = async (req, res, next) => {
 exports.getWithdrawalDetails = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const wr = await WithdrawalRequest.findById(id).populate('customerId').lean();
-        if (!wr) return res.status(404).json({ success: false, message: 'Withdrawal not found' });
+        let wr = await WithdrawalRequest.findById(id).populate('customerId').lean();
+        let isAutoPayout = false;
+        
+        if (!wr) {
+            wr = await Payout.findById(id).populate('customerId').lean();
+            if (wr) {
+                isAutoPayout = true;
+                wr.bankDetails = {
+                    bankName: wr.bankName,
+                    branchName: wr.branchName,
+                    accountHolder: wr.accountName,
+                    accountNumber: wr.accountNumber
+                };
+            } else {
+                return res.status(404).json({ success: false, message: 'Withdrawal/Payout not found' });
+            }
+        }
         
         const Application = require('../models/Application');
         const wallet = await Wallet.findOne({ customerId: wr.customerId._id }).lean();
@@ -967,12 +1022,22 @@ exports.completeWithdrawalRequest = async (req, res, next) => {
         const opt = session ? { session } : {};
 
         // Use conditional session application
-        const withdrawalQuery = WithdrawalRequest.findById(id);
+        let withdrawalQuery = WithdrawalRequest.findById(id);
         if (session) withdrawalQuery.session(session);
-        const withdrawal = await withdrawalQuery;
+        let withdrawal = await withdrawalQuery;
+        
+        let isAutoPayout = false;
+        if (!withdrawal) {
+            let payoutQuery = Payout.findById(id);
+            if (session) payoutQuery.session(session);
+            withdrawal = await payoutQuery;
+            if (withdrawal) {
+                isAutoPayout = true;
+            }
+        }
 
-        if (!withdrawal || withdrawal.status !== 'APPROVED') {
-            throw new Error('Withdrawal request not found or not in APPROVED state for payout processing');
+        if (!withdrawal || (isAutoPayout ? withdrawal.status !== 'PENDING' : withdrawal.status !== 'APPROVED')) {
+            throw new Error('Request not found or not in correct state for payout processing');
         }
 
         const walletQuery = Wallet.findOne({ customerId: withdrawal.customerId });
@@ -980,48 +1045,60 @@ exports.completeWithdrawalRequest = async (req, res, next) => {
         const wallet = await walletQuery;
 
         if (!wallet || wallet.heldBalance < withdrawal.amount) {
-            throw new Error('Wallet holding error detected before completion');
+            throw new Error('Wallet holding error detected before completion — insufficient held balance');
         }
 
         withdrawal.status = 'COMPLETED';
         withdrawal.payoutReferenceNumber = bankReference || 'N/A';
         withdrawal.processedBy = req.user ? req.user._id : null;
-        withdrawal.processedAt = Date.now();
         withdrawal.completedAt = Date.now();
-        withdrawal.statusHistory.push({
-            status: 'COMPLETED',
-            changedAt: Date.now(),
-            changedBy: req.user ? req.user.fullName : 'ADMIN',
-            remark: `Payout confirmed with Bank Reference: ${bankReference || 'N/A'}`
-        });
+        if (!isAutoPayout) {
+            withdrawal.processedAt = Date.now();
+            withdrawal.statusHistory.push({
+                status: 'COMPLETED',
+                changedAt: Date.now(),
+                changedBy: req.user ? req.user.fullName : 'ADMIN',
+                remark: `Payout confirmed with Bank Reference: ${bankReference || 'N/A'}`
+            });
+        }
         await (session ? withdrawal.save({ session }) : withdrawal.save());
 
-        // Update Payout record
-        const payoutUpdate = { 
-            status: 'COMPLETED', 
+        // Sync linked Payout / ProfitPayoutLog records
+        const payoutCompletionUpdate = {
+            status: 'COMPLETED',
             payoutReferenceNumber: bankReference || 'N/A',
             completedAt: Date.now(),
             processedBy: req.user ? req.user._id : null
         };
-        if (session) {
-            await Payout.findOneAndUpdate({ withdrawalRequestId: withdrawal._id }, payoutUpdate, { session });
+        if (isAutoPayout) {
+            // Auto-payout IS the Payout record — mark its linked ProfitPayoutLog as COMPLETED
+            if (withdrawal.referenceNumber?.startsWith('AUTO-')) {
+                const idempotencyKey = withdrawal.referenceNumber.replace('AUTO-', '');
+                await ProfitPayoutLog.findOneAndUpdate({ idempotencyKey }, { status: 'COMPLETED' });
+            }
         } else {
-            await Payout.findOneAndUpdate({ withdrawalRequestId: withdrawal._id }, payoutUpdate);
+            // Manual withdrawal — update the linked Payout record
+            if (session) {
+                await Payout.findOneAndUpdate({ withdrawalRequestId: withdrawal._id }, payoutCompletionUpdate, { session });
+            } else {
+                await Payout.findOneAndUpdate({ withdrawalRequestId: withdrawal._id }, payoutCompletionUpdate);
+            }
         }
 
         const heldBefore = wallet.heldBalance;
         const totalBefore = wallet.totalBalance;
         const availableBefore = wallet.availableBalance;
 
-        // Finalize Deduction
-        const walletUpdate = { 
-            $inc: { 
-                heldBalance: -withdrawal.amount, 
+        // Release held funds — applies to both manual withdrawals and auto bank-transfer payouts
+        const walletUpdate = {
+            $inc: {
+                heldBalance: -withdrawal.amount,
                 totalBalance: -withdrawal.amount,
-                totalWithdrawn: withdrawal.amount 
-            } 
+                totalWithdrawn: withdrawal.amount
+            }
         };
-        const updatedWallet = session 
+
+        const updatedWallet = session
             ? await Wallet.findOneAndUpdate({ customerId: withdrawal.customerId }, walletUpdate, { session, new: true })
             : await Wallet.findOneAndUpdate({ customerId: withdrawal.customerId }, walletUpdate, { new: true });
 
@@ -1043,11 +1120,13 @@ exports.completeWithdrawalRequest = async (req, res, next) => {
                 customerId: withdrawal.customerId,
                 walletId: updatedWallet._id,
                 type: 'WITHDRAWAL_COMPLETED',
-                referenceType: 'WITHDRAWAL',
+                referenceType: isAutoPayout ? 'MONTHLY_RETURN' : 'WITHDRAWAL',
                 referenceId: withdrawal._id,
                 amount: -withdrawal.amount,
                 status: 'COMPLETED',
-                description: `Withdrawal Transfer Completed - Ref: ${withdrawal.referenceNumber}`,
+                description: isAutoPayout
+                    ? `Monthly Return Bank Transfer Completed - Bank Ref: ${bankReference || 'N/A'} | Internal: ${withdrawal.referenceNumber}`
+                    : `Withdrawal Transfer Completed - Ref: ${withdrawal.referenceNumber}`,
                 balanceBefore: totalBefore,
                 balanceAfter: updatedWallet.totalBalance,
                 availableBefore: availableBefore,
@@ -1075,19 +1154,27 @@ exports.completeWithdrawalRequest = async (req, res, next) => {
         try {
             const customer = await Customer.findById(withdrawal.customerId);
             if (customer) {
+                const notifTitle = isAutoPayout ? 'Monthly Return Credited' : 'Withdrawal Completed';
+                const notifMessage = isAutoPayout
+                    ? `Your monthly return of LKR ${withdrawal.amount.toLocaleString()} has been transferred to your bank. Ref: ${bankReference || 'N/A'}`
+                    : `Your withdrawal of LKR ${withdrawal.amount.toLocaleString()} has been processed. Ref: ${bankReference || 'N/A'}`;
+
                 // 1. Dashboard Notification
                 await Notification.create({
                     customerId: customer._id,
-                    title: 'Withdrawal Completed',
-                    message: `Your withdrawal of LKR ${withdrawal.amount.toLocaleString()} has been processed. Ref: ${bankReference || 'N/A'}`,
+                    title: notifTitle,
+                    message: notifMessage,
                     type: 'SUCCESS'
                 });
 
                 // 2. SMS Notification
                 if (customer.mobile) {
+                    const smsText = isAutoPayout
+                        ? `NF PLANTATION: Your monthly return of LKR ${withdrawal.amount.toLocaleString()} has been transferred to your bank. Bank Ref: ${bankReference || 'N/A'}. Thank you.`
+                        : `NF PLANTATION: Your withdrawal of LKR ${withdrawal.amount.toLocaleString()} was successful. Bank Ref: ${bankReference || 'N/A'}. Thank you.`;
                     await smsService.sendSms({
                         phone: customer.mobile,
-                        text: `NF PLANTATION: Your withdrawal of LKR ${withdrawal.amount.toLocaleString()} was successful. Bank Ref: ${bankReference || 'N/A'}. Thank you.`
+                        text: smsText
                     }).catch(e => console.error('SMS Failed:', e.message));
                 }
 
@@ -1275,9 +1362,8 @@ exports.approveInvestment = async (req, res, next) => {
         // Update Investment State
         investment.status = 'ACTIVE';
         investment.startDate = new Date();
-        const endDate = new Date();
-        endDate.setMonth(endDate.getMonth() + investment.durationMonths);
-        investment.endDate = endDate;
+        investment.nextProfitDate = addMonths(new Date(), 1);
+        investment.endDate = addMonths(new Date(), investment.durationMonths);
         investment.approvedBy = req.user._id;
         await investment.save({ session });
 
@@ -1555,12 +1641,144 @@ exports.rejectInvestment = async (req, res, next) => {
 exports.getPayoutList = async (req, res, next) => {
     try {
         const { status = 'PENDING' } = req.query; // PENDING for Active Payouts, COMPLETED for History
-        const payouts = await Payout.find({ 
-            status: { $regex: new RegExp(`^${status}$`, 'i') } 
+        const payouts = await Payout.find({
+            status: { $regex: new RegExp(`^${status}$`, 'i') }
         })
             .populate('customerId', 'fullName nic mobile bankDetails')
             .sort({ createdAt: -1 });
         res.json({ success: true, data: payouts });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getAdminActivityLog = async (req, res, next) => {
+    try {
+        const AuditLog = require('../models/AuditLog');
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 30;
+        const skip = (page - 1) * limit;
+
+        const logs = await AuditLog.find()
+            .populate('userId', 'name userId email role')
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        const total = await AuditLog.countDocuments();
+
+        res.json({
+            success: true,
+            data: logs,
+            pagination: { total, page, limit, pages: Math.ceil(total / limit) }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getReportSummary = async (req, res, next) => {
+    try {
+        const Branch = require('../models/Branch');
+
+        const [
+            depositStats, withdrawalStats, investmentStats,
+            profitStats, pendingPayoutStats,
+            branchList, customerByBranch, planWise,
+            totalCustomers, kycVerified
+        ] = await Promise.all([
+            DepositRequest.aggregate([
+                { $match: { status: 'APPROVED' } },
+                { $group: { _id: null, total: { $sum: '$amount' } } }
+            ]),
+            WithdrawalRequest.aggregate([
+                { $match: { status: { $in: ['COMPLETED', 'APPROVED'] } } },
+                { $group: { _id: null, total: { $sum: '$amount' } } }
+            ]),
+            CustomerInvestment.aggregate([
+                { $match: { status: 'ACTIVE' } },
+                { $group: { _id: null, total: { $sum: '$investedAmount' } } }
+            ]),
+            Transaction.aggregate([
+                { $match: { type: { $in: ['PROFIT', 'EARNING'] }, status: 'COMPLETED' } },
+                { $group: { _id: null, total: { $sum: '$amount' } } }
+            ]),
+            Payout.aggregate([
+                { $match: { status: 'PENDING' } },
+                { $group: { _id: null, total: { $sum: '$amount' } } }
+            ]),
+            Branch.find({}, 'name _id').lean(),
+            Customer.aggregate([
+                {
+                    $group: {
+                        _id: '$branchId',
+                        total: { $sum: 1 },
+                        active: { $sum: { $cond: [{ $eq: ['$isActive', true] }, 1, 0] } }
+                    }
+                }
+            ]),
+            CustomerInvestment.aggregate([
+                {
+                    $group: {
+                        _id: { planName: '$planName', status: '$status' },
+                        count: { $sum: 1 },
+                        totalAmount: { $sum: '$investedAmount' }
+                    }
+                }
+            ]),
+            Customer.countDocuments(),
+            Customer.countDocuments({ isActive: true })
+        ]);
+
+        const branchMap = {};
+        branchList.forEach(b => { branchMap[b._id.toString()] = b.name; });
+
+        const branchWise = customerByBranch
+            .filter(b => b._id)
+            .map(b => ({
+                name: branchMap[b._id.toString()] || 'Unknown Branch',
+                total: b.total,
+                active: b.active,
+                inactive: b.total - b.active
+            }))
+            .filter(b => b.name !== 'Unknown Branch')
+            .sort((a, b) => b.total - a.total);
+
+        const planMap = {};
+        planWise.forEach(item => {
+            const name = item._id.planName || 'Other';
+            if (!planMap[name]) planMap[name] = { name, active: 0, matured: 0, completed: 0, totalAmount: 0 };
+            const s = item._id.status;
+            if (s === 'ACTIVE') planMap[name].active += item.count;
+            else if (s === 'MATURED') planMap[name].matured += item.count;
+            else if (s === 'COMPLETED') planMap[name].completed += item.count;
+            planMap[name].totalAmount += item.totalAmount;
+        });
+
+        const kycRatio = totalCustomers > 0 ? parseFloat(((kycVerified / totalCustomers) * 100).toFixed(1)) : 0;
+
+        res.json({
+            success: true,
+            data: {
+                finance: {
+                    totalDeposits: depositStats[0]?.total || 0,
+                    totalWithdrawals: withdrawalStats[0]?.total || 0,
+                    activeCapital: investmentStats[0]?.total || 0,
+                    totalProfitPaid: profitStats[0]?.total || 0,
+                    pendingPayouts: pendingPayoutStats[0]?.total || 0
+                },
+                customers: {
+                    branchWise,
+                    kycRatio,
+                    totalCustomers,
+                    kycVerified
+                },
+                investments: {
+                    planWise: Object.values(planMap).sort((a, b) => b.totalAmount - a.totalAmount)
+                }
+            }
+        });
     } catch (error) {
         next(error);
     }

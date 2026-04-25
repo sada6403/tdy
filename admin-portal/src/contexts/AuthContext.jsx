@@ -40,8 +40,11 @@ export const AuthProvider = ({ children }) => {
         window.location.href = '/login';
     };
 
+    const isSuperAdmin = user?.isSuperAdmin || user?.role === 'ADMIN';
+    const isBranchAdmin = user?.role === 'BRANCH_ADMIN';
+
     return (
-        <AuthContext.Provider value={{ user, loading, checkAuth, logout }}>
+        <AuthContext.Provider value={{ user, loading, checkAuth, logout, isSuperAdmin, isBranchAdmin }}>
             {children}
         </AuthContext.Provider>
     );

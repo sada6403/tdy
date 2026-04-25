@@ -17,6 +17,8 @@ const CustomerInvestmentSchema = new mongoose.Schema({
   startDate:         { type: Date },
   endDate:           { type: Date },
   monthlyProfit:     { type: Number },
+  nextProfitDate:    { type: Date },
+  totalProfitEarned: { type: Number, default: 0 },
   status: {
     type: String,
     enum: ['PENDING_ACTIVATION_APPROVAL', 'ACTIVE', 'MATURED', 'CANCELLED', 'REJECTED'],

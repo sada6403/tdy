@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const { sendInvestmentActivationEmail } = require('../utils/emailService');
 const { sendSms } = require('../utils/smsService');
 const ApplicationAddress = require('../models/ApplicationAddress');
+const ApplicationDocument = require('../models/ApplicationDocument');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const ApplicationOtp = require('../models/ApplicationOtp');
@@ -634,28 +635,21 @@ exports.getProfile = async (req, res, next) => {
         const User = require('../models/User');
         const Wallet = require('../models/Wallet');
         const Application = require('../models/Application');
-        
+        const PendingApproval = require('../models/PendingApproval');
+
         const user = await User.findById(req.user.id);
         if (!user) return res.status(401).json({ success: false, message: 'Session invalid' });
 
         let customer = null;
-        
-        // Priority 1: Direct link from user object
-        if (user.customerId) {
-            customer = await Customer.findById(user.customerId);
-        }
 
-        // Priority 2: Full cross-match if direct link is missing
-        if (!customer) {
-            customer = await Customer.findOne({ 
-                $or: [
-                    { email: user.email }, 
-                    { userId: user.userId },
-                    { mobile: user.phone }
-                ] 
-            });
+        if (user.customerId) {
+            customer = await Customer.findById(user.customerId).populate('agentId');
         }
-        
+        if (!customer) {
+            customer = await Customer.findOne({
+                $or: [{ email: user.email }, { userId: user.userId }, { mobile: user.phone }]
+            }).populate('agentId');
+        }
         if (!customer) {
             return res.status(404).json({ success: false, message: 'Customer profile not found' });
         }
@@ -667,56 +661,130 @@ exports.getProfile = async (req, res, next) => {
         }
 
         const app = await Application.findOne({ customerId: customer._id }).sort({ createdAt: -1 });
-        let finalAddress = customer.address || '';
-        if (!finalAddress && app) {
-            const addressDoc = await ApplicationAddress.findOne({ applicationId: app._id });
-            if (addressDoc) {
-                finalAddress = `${addressDoc.permanentAddress}, ${addressDoc.city}, ${addressDoc.district}, ${addressDoc.province}`;
-            }
-            if (!finalAddress) {
-                finalAddress = app?.personalDetails?.address || app?.address || '';
+
+        // Fetch the PendingApproval snapshot — has dob, gender, address from registration
+        const snapshot = app ? await PendingApproval.findOne({ applicationId: app._id }) : null;
+
+        let needsSave = false;
+
+        // ── Address ──
+        const addrObj = customer.address;
+        const hasAddrInCustomer = addrObj?.line1 || addrObj?.city || addrObj?.district;
+        let finalAddress = '';
+        if (hasAddrInCustomer) {
+            finalAddress = [addrObj.line1, addrObj.city, addrObj.district, addrObj.province]
+                .filter(Boolean).join(', ');
+        } else {
+            // Try snapshot first, then ApplicationAddress
+            const src = (snapshot?.address || snapshot?.city) ? snapshot : null;
+            if (src) {
+                finalAddress = [src.address?.replace(/\r\n|\r|\n/g, ' ').trim(), src.city, src.district, src.province].filter(Boolean).join(', ');
+                customer.address = { line1: src.address || '', city: src.city || '', district: src.district || '', province: src.province || '' };
+                needsSave = true;
+            } else if (app) {
+                const addressDoc = await ApplicationAddress.findOne({ applicationId: app._id });
+                if (addressDoc) {
+                    const cleanAddr = addressDoc.permanentAddress?.replace(/\r\n|\r|\n/g, ' ').trim() || '';
+                    finalAddress = [cleanAddr, addressDoc.city, addressDoc.district, addressDoc.province].filter(Boolean).join(', ');
+                    customer.address = { line1: cleanAddr, city: addressDoc.city || '', district: addressDoc.district || '', province: addressDoc.province || '' };
+                    needsSave = true;
+                }
             }
         }
 
-        const finalBankName = customer.bankDetails?.bankName || customer.bankName || app?.bankDetails?.bankName || '';
-        const finalBranchName = customer.bankDetails?.branchName || customer.branchName || app?.bankDetails?.branchName || '';
-        const finalAccountHolder = customer.bankDetails?.accountHolder || customer.accountHolder || customer.accountName || app?.bankDetails?.accountHolder || '';
-        const finalAccountNumber = customer.bankDetails?.accountNumber || customer.accountNumber || app?.bankDetails?.accountNumber || '';
-        const finalMobile = customer.mobile || app?.personalDetails?.mobile || user.phone || 'N/A';
+        // ── DOB ──
+        let finalDob = customer.dob || null;
+        if (!finalDob && snapshot?.dob) {
+            finalDob = snapshot.dob;
+            customer.dob = finalDob;
+            needsSave = true;
+        }
 
-        console.log("DEBUG: CUSTOMER PROFILE SYNC", { 
-            id: user.userId, 
-            customerMobile: customer.mobile, 
-            appMobile: app?.personalDetails?.mobile, 
-            userPhone: user.phone 
-        });
-        
+        // ── Gender ──
+        let finalGender = customer.gender || '';
+        if (!finalGender && snapshot?.gender) {
+            finalGender = snapshot.gender;
+            customer.gender = finalGender;
+            needsSave = true;
+        }
+
+        // ── Photo ──
+        let finalPhoto = customer.photoUrl || user.photoUrl || '';
+
+        // Re-finalize if still a pending S3 URL
+        if (finalPhoto && finalPhoto.includes('/pending/')) {
+            const { finalizeS3File } = require('../utils/s3Service');
+            const s3Key = finalPhoto.split('.amazonaws.com/')[1];
+            if (s3Key) {
+                const moved = await finalizeS3File(s3Key).catch(() => null);
+                if (moved?.url) {
+                    finalPhoto = moved.url;
+                } else {
+                    // File might already be in verified/ — just fix the URL
+                    finalPhoto = finalPhoto.replace('/pending/', '/verified/');
+                }
+                customer.photoUrl = finalPhoto;
+                needsSave = true;
+            }
+        }
+
+        // Pull from ApplicationDocument if still no photo
+        if (!finalPhoto && app) {
+            const photoDoc = await ApplicationDocument.findOne({ applicationId: app._id, documentType: 'photo' });
+            if (photoDoc?.fileUrl) {
+                finalPhoto = photoDoc.fileUrl;
+                customer.photoUrl = finalPhoto;
+                needsSave = true;
+            }
+        }
+
+        // One consolidated save for all backfilled fields
+        if (needsSave) await customer.save().catch(err => console.warn('[PROFILE_BACKFILL]', err.message));
+
+        const finalBankName = customer.bankDetails?.bankName || app?.bankDetails?.bankName || '';
+        const finalBranchName = customer.bankDetails?.branchName || app?.bankDetails?.branchName || '';
+        const finalAccountHolder = customer.bankDetails?.accountHolder || app?.bankDetails?.accountHolder || '';
+        const finalAccountNumber = customer.bankDetails?.accountNumber || app?.bankDetails?.accountNumber || '';
+        const finalMobile = customer.mobile || user.phone || 'N/A';
+
         res.json({
             success: true,
             data: {
-                ...customer.toObject(),
-                fullName: customer.fullName || user.name || "N/A",
-                name: customer.fullName || user.name || "N/A",
-                email: customer.email || user.email || 'N/A',
-                phone: finalMobile,
-                mobile: finalMobile,
-                address: finalAddress || customer.address || 'Address information restricted or not provided.',
-                userId: user.userId || customer.userId || 'N/A',
-                bankName: finalBankName,
-                branchName: finalBranchName,
-                accountHolder: finalAccountHolder,
-                accountNumber: finalAccountNumber,
+                id:              customer._id,
+                customerId:      customer._id,
+                fullName:        customer.fullName || user.name || 'N/A',
+                name:            customer.fullName || user.name || 'N/A',
+                nic:             customer.nic      || '',
+                email:           customer.email    || user.email || 'N/A',
+                phone:           finalMobile,
+                mobile:          finalMobile,
+                dob:             finalDob,
+                gender:          finalGender,
+                address:         finalAddress,
+                userId:          user.userId || 'N/A',
+                bankName:        finalBankName,
+                branchName:      finalBranchName,
+                accountHolder:   finalAccountHolder,
+                accountNumber:   finalAccountNumber,
+                kycStatus:       customer.kycStatus || 'PENDING',
+                adminApproved:   customer.kycStatus === 'VERIFIED' || customer.isActive === true,
+                photoUrl:        finalPhoto,
+                signature:       customer.signature || '',
                 applicationStatus: app?.status || 'NOT_FOUND',
-                adminApproved: customer.isActive,
-                photoUrl: customer.photoUrl || user.photoUrl || '',
-                walletBalance: wallet.availableBalance,
+                walletBalance:   wallet.availableBalance,
                 walletSummary: {
-                    totalInvested: wallet.totalInvested,
-                    totalEarned: wallet.totalEarned,
+                    totalInvested:  wallet.totalInvested,
+                    totalEarned:    wallet.totalEarned,
                     totalWithdrawn: wallet.totalWithdrawn,
-                    totalBalance: wallet.totalBalance,
-                    heldBalance: wallet.heldBalance
-                }
+                    totalBalance:   wallet.totalBalance,
+                    heldBalance:    wallet.heldBalance
+                },
+                agent: customer.agentId ? {
+                    name: customer.agentId.name,
+                    contact: customer.agentId.contact,
+                    email: customer.agentId.email || null,
+                    designation: customer.agentId.designation || 'Field Agent'
+                } : null
             }
         });
     } catch (error) {

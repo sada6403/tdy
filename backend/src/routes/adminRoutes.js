@@ -12,7 +12,8 @@ const customerAdminController = require('../controllers/customerAdminController'
 const customerReportController = require('../controllers/customerReportController');
 const heroController = require('../controllers/heroController');
 const contactController = require('../controllers/contactController');
-const { uploadMarketing } = require('../utils/s3Service');
+const supportController = require('../controllers/supportController');
+const { uploadMarketing, uploadBranch } = require('../utils/s3Service');
 
 const handleValidation = (req, res, next) => {
 	const errors = validationResult(req);
@@ -31,8 +32,8 @@ const handleValidation = (req, res, next) => {
 // Publicly accessible for image loading (Security by Obscurity via S3 Keys)
 router.get('/view-document', approvalController.proxyS3Document);
 
-// All Admin routes should be protected by ADMIN role
-router.use(protect, authorize('ADMIN'));
+// All Admin routes — accessible to ADMIN (super) and BRANCH_ADMIN
+router.use(protect, authorize('ADMIN', 'BRANCH_ADMIN'));
 
 // Dashboard Metrics
 router.get('/dashboard', adminController.getDashboardMetrics);
@@ -70,9 +71,19 @@ router.post('/investments/:id/approve', adminController.approveInvestment);
 router.post('/investments/:id/reject', adminController.rejectInvestment);
 router.put('/investments/:id/status', adminController.updateInvestmentStatus);
 
-// Manage Notifications
+// Manage Notifications (customer-facing)
 router.post('/notifications', notificationController.createNotification);
 router.get('/notifications', notificationController.getAllNotifications);
+
+// Customer Support Requests
+router.get('/support-requests', supportController.getSupportRequests);
+router.patch('/support-requests/:id/status', supportController.updateSupportStatus);
+router.patch('/support-requests/:id/read', supportController.markSupportRead);
+
+// Admin Notification Bell
+router.get('/admin-notifications', supportController.getAdminNotifications);
+router.patch('/admin-notifications/mark-all-read', supportController.markAllAdminNotificationsRead);
+router.patch('/admin-notifications/:id/read', supportController.markAdminNotificationRead);
 
 // Manage Expenses (Cost Management)
 router.get('/expenses', expenseController.getExpenses);
@@ -126,19 +137,39 @@ router.get('/groups', adminController.getCustomerGroups);
 
 // Analytics & Engine
 router.get('/analytics', adminController.getAnalytics);
+router.get('/reports/summary', adminController.getReportSummary);
+
+// Admin Activity Log (read-only timeline)
+router.get('/activity-log', adminController.getAdminActivityLog);
+
+// Branch Admin Management (Super Admin only)
+const branchAdminController = require('../controllers/branchAdminController');
+router.get('/branch-admins', branchAdminController.getBranchAdmins);
+router.post('/branch-admins', branchAdminController.createBranchAdmin);
+router.put('/branch-admins/:id', branchAdminController.updateBranchAdmin);
+router.patch('/branch-admins/:id/toggle', branchAdminController.toggleBranchAdminStatus);
+router.delete('/branch-admins/:id', branchAdminController.deleteBranchAdmin);
+router.get('/online-admins', branchAdminController.getOnlineAdmins);
+router.get('/role-summary', branchAdminController.getRoleSummary);
 router.post('/run-monthly-payouts', adminController.runMonthlyPayouts);
 router.get('/payout-schedules', adminController.getPayoutSchedules);
+router.get('/payout-stats', adminController.getPayoutStats);
 router.get('/payout-logs/:id', adminController.getPayoutDetail);
 
 // Manage Branches
+router.get('/branch-stats', branchController.getBranchStats);
 router.get('/branches', branchController.getAllBranches);
-router.post('/branches', branchController.createBranch);
+router.post('/branches', uploadBranch.single('photo'), branchController.createBranch);
+router.put('/branches/:id', uploadBranch.single('photo'), branchController.updateBranch);
 router.delete('/branches/:id', branchController.deleteBranch);
 
 // Manage Agents
 const agentController = require('../controllers/agentController');
+router.get('/agents/unassigned-customers', agentController.getUnassignedCustomers);
 router.get('/agents', agentController.getAllAgents);
 router.post('/agents', agentController.createAgent);
+router.put('/agents/:id', agentController.updateAgent);
+router.post('/agents/:id/assign', agentController.assignCustomer);
 router.delete('/agents/:id', agentController.deleteAgent);
 
 // Website Settings

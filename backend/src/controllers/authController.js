@@ -1,6 +1,9 @@
 const authService = require('../services/auth/AuthService');
 const User = require('../models/User');
+const AuditLog = require('../models/AuditLog');
 const Customer = require('../models/Customer');
+const Application = require('../models/Application');
+const ApplicationDocument = require('../models/ApplicationDocument');
 const ApplicationOtp = require('../models/ApplicationOtp');
 const Notification = require('../models/Notification');
 const bcrypt = require('bcrypt');
@@ -29,15 +32,28 @@ exports.login = async (req, res, next) => {
             maxAge: 24 * 60 * 60 * 1000 // 1 day matched with JWT expiry
         });
 
+        // Log login event
+        AuditLog.create({
+            userId: user._id,
+            action: 'ADMIN_LOGIN',
+            target: 'AUTH',
+            description: `${user.name} (${user.userId}) signed in`,
+            severity: 'INFO',
+            ipAddress: req.ip || req.headers['x-forwarded-for'] || 'UNKNOWN',
+            userAgent: req.headers['user-agent']
+        }).catch(() => {});
+
         res.json({
             success: true,
-            data: { 
-                id: user._id, 
-                name: user.name, 
-                userId: user.userId, 
-                role: user.role, 
+            data: {
+                id: user._id,
+                name: user.name,
+                userId: user.userId,
+                role: user.role,
+                isSuperAdmin: user.isSuperAdmin || user.role === 'ADMIN',
+                branchId: user.branchId || null,
                 token: token,
-                mustChangePassword: user.mustChangePassword 
+                mustChangePassword: user.mustChangePassword
             }
         });
 
@@ -51,6 +67,17 @@ exports.login = async (req, res, next) => {
 
 
 exports.logout = (req, res) => {
+    // Log logout if user is authenticated
+    if (req.user) {
+        AuditLog.create({
+            userId: req.user._id,
+            action: 'ADMIN_LOGOUT',
+            target: 'AUTH',
+            description: `${req.user.name} signed out`,
+            severity: 'INFO',
+            ipAddress: req.ip || 'UNKNOWN'
+        }).catch(() => {});
+    }
     res.cookie('nf_token', '', {
         httpOnly: true,
         expires: new Date(0),
@@ -62,10 +89,25 @@ exports.logout = (req, res) => {
 
 exports.getMe = async (req, res, next) => {
     let userData = req.user.toObject();
-    
+
     // If the user is a customer, merge their profile details for the frontend
     if (req.customer) {
-        const customerObj = req.customer.toObject();
+        const customer = req.customer;
+        const customerObj = customer.toObject();
+
+        // Lazy backfill photoUrl from ApplicationDocument for existing customers
+        if (!customerObj.photoUrl) {
+            const app = await Application.findOne({ customerId: customer._id }).sort({ createdAt: -1 });
+            if (app) {
+                const photoDoc = await ApplicationDocument.findOne({ applicationId: app._id, documentType: 'photo' });
+                if (photoDoc?.fileUrl) {
+                    customerObj.photoUrl = photoDoc.fileUrl;
+                    customer.photoUrl = photoDoc.fileUrl;
+                    await customer.save();
+                }
+            }
+        }
+
         userData = {
             ...userData,
             ...customerObj,
@@ -76,7 +118,13 @@ exports.getMe = async (req, res, next) => {
             accountNumber: customerObj.bankDetails?.accountNumber || null
         };
     }
-    
+
+    // Always include admin-specific fields for admin portal
+    if (!req.customer) {
+        userData.isSuperAdmin = req.user.isSuperAdmin || req.user.role === 'ADMIN';
+        userData.branchId = req.user.branchId || null;
+    }
+
     res.json({ success: true, data: userData });
 };
 
