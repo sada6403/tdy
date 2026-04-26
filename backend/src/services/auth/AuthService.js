@@ -7,20 +7,22 @@ const generateToken = require('../../utils/generateToken');
  */
 class AuthService {
     async login({ user_id, password }) {
-        console.log(`[AuthService] Attempting login for user: ${user_id}`);
-        const user = await User.findOne({ 
+        const user = await User.findOne({
             $or: [{ userId: user_id }, { email: user_id }],
-            isActive: true 
+            isActive: true
         });
 
         if (!user) {
-            console.log(`[AuthService] User not found: ${user_id}`);
             throw new Error('Invalid Credentials');
         }
 
-        console.log(`[AuthService] User found. Comparing password...`);
+        // Enforce account lockout before checking password (prevents timing attacks)
+        if (user.lockoutUntil && user.lockoutUntil > new Date()) {
+            const minutesLeft = Math.ceil((user.lockoutUntil - Date.now()) / 60000);
+            throw new Error(`Account locked. Try again in ${minutesLeft} minute(s).`);
+        }
+
         const isMatch = await user.comparePassword(password);
-        console.log(`[AuthService] Password match: ${isMatch}`);
 
         if (!isMatch) {
             user.loginAttempts = (user.loginAttempts || 0) + 1;
@@ -32,7 +34,7 @@ class AuthService {
             throw new Error('Invalid Credentials');
         }
 
-        // Success
+        // Success — clear lockout state
         user.loginAttempts = 0;
         user.lockoutUntil = undefined;
         await user.save();

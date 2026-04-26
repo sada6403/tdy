@@ -2,18 +2,15 @@ const jwt = require('jsonwebtoken');
 
 const generateToken = (id, roleName) => {
     const secret = process.env.JWT_SECRET;
-    
+
     if (!secret) {
-        console.error('❌ JWT_SECRET is missing! Falling back to emergency key for debug.');
-        // Note: In production, this should throw an error. 
-        // We use a fallback here only to confirm if the app starts working.
-        return jwt.sign({ id, role: roleName }, 'emergency_fallback_secret_2026', {
-            expiresIn: process.env.JWT_EXPIRES_IN || '30d',
-        });
+        // SECURITY: Never fall back to a known secret — fail hard.
+        console.error('❌ FATAL: JWT_SECRET is not set. Refusing to issue token with fallback.');
+        throw new Error('Server misconfiguration: JWT_SECRET is missing.');
     }
 
     return jwt.sign({ id, role: roleName }, secret, {
-        expiresIn: process.env.JWT_EXPIRES_IN || '30d',
+        expiresIn: process.env.JWT_EXPIRES_IN || '1d',
     });
 };
 

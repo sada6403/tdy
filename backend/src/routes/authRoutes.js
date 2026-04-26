@@ -1,5 +1,5 @@
 const express = require('express');
-const { login, logout, getMe, changePassword, verifyNic, sendForgotPasswordOtp, verifyForgotPasswordOtp, resetForgotPassword } = require('../controllers/authController');
+const { login, logout, getMe, changePassword, verifyNic, sendForgotPasswordOtp, verifyForgotPasswordOtp, resetForgotPassword, sendAdminPasswordChangeOtp, adminChangePasswordWithOtp } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const rateLimit = require('express-rate-limit');
 
@@ -17,6 +17,8 @@ router.post('/login', loginLimiter, login);
 router.post('/logout', logout);
 router.get('/me', protect, getMe);
 router.post('/change-password', protect, changePassword);
+router.post('/admin/send-change-otp', protect, sendAdminPasswordChangeOtp);
+router.post('/admin/change-password-otp', protect, adminChangePasswordWithOtp);
 
 // Forgot Password
 router.post('/forgot-password/verify-nic', verifyNic);

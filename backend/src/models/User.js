@@ -14,6 +14,7 @@ const UserSchema = new mongoose.Schema({
   loginAttempts: { type: Number, default: 0 },
   lockoutUntil: { type: Date },
   mustChangePassword: { type: Boolean, default: false },
+  passwordChangedAt: { type: Date, default: null },
   customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
   photoUrl: { type: String, default: '' },
   lastSeen: { type: Date, default: null },

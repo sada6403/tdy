@@ -6,7 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import {
   LayoutDashboard, Users, ShieldCheck, Wallet, FileCheck, Landmark,
   ArrowUpCircle, BarChart3, Building2, UserCog, Bell, FileText,
-  History, Settings, LogOut, ChevronLeft, Shield, Monitor, Zap, Receipt, Globe, PlayCircle, ChevronDown, Headset
+  History, Settings, LogOut, ChevronLeft, Shield, Monitor, Zap, Globe, PlayCircle, ChevronDown, Headset
 } from 'lucide-react';
 // Routes accessible to Branch Admin
 const BRANCH_ADMIN_PATHS = new Set(['/', '/customers', '/customer-approvals', '/deposits', '/plan-activations', '/withdrawals', '/monthly-profit', '/payout', '/agents', '/notifications', '/customer-support', '/reports']);
@@ -61,7 +61,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     { title: 'Agents', icon: <UserCog size={20} />, path: '/agents' },
     { title: 'Notifications', icon: <Bell size={20} />, path: '/notifications' },
     { title: 'Customer Support', icon: <Headset size={20} />, path: '/customer-support', badge: supportUnread },
-    { title: 'Expenses', icon: <Receipt size={20} />, path: '/expenses', superAdminOnly: true },
     { title: 'Reports', icon: <FileText size={20} />, path: '/reports' },
     { title: 'Audit Logs', icon: <History size={20} />, path: '/audit-logs', superAdminOnly: true },
     { title: 'Roles & Permissions', icon: <Shield size={20} />, path: '/roles-permissions', superAdminOnly: true },

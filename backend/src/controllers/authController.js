@@ -141,6 +141,92 @@ exports.changePassword = async (req, res, next) => {
     }
 };
 
+// In-memory OTP store for admin password change: Map<userId, {otp, expiresAt}>
+const adminOtpStore = new Map();
+const ADMIN_OTP_DEST = 'info@nfplantation.com';
+
+exports.sendAdminPasswordChangeOtp = async (req, res, next) => {
+    try {
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+        adminOtpStore.set(req.user._id.toString(), { otp, expiresAt });
+
+        const html = `
+        <!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+        body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f7f9;margin:0;padding:0}
+        .wrap{max-width:560px;margin:40px auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+        .hd{background:#0c1c2c;padding:28px 32px;text-align:center;color:#fff;font-size:20px;font-weight:800;letter-spacing:1px}
+        .bd{padding:36px 32px;color:#334155;line-height:1.7}
+        .otp-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:28px;text-align:center;margin:28px 0}
+        .otp{font-size:40px;font-weight:900;color:#10b981;letter-spacing:10px}
+        .exp{font-size:12px;color:#94a3b8;margin-top:8px}
+        .warn{background:#fffbeb;border-left:4px solid #f59e0b;padding:14px 16px;border-radius:0 8px 8px 0;font-size:13px;color:#92400e;margin-bottom:20px}
+        .ft{background:#1a1a1a;padding:24px;text-align:center;font-size:11px;color:#888}
+        </style></head><body>
+        <div class="wrap">
+          <div class="hd">NF PLANTATION — ADMIN SECURITY</div>
+          <div class="bd">
+            <p>An administrator (<strong>${req.user.name} / ${req.user.userId || req.user.email}</strong>) has requested a password change on the NF Plantation Admin Portal.</p>
+            <div class="otp-box">
+              <div class="otp">${otp}</div>
+              <div class="exp">Expires in 10 minutes</div>
+            </div>
+            <div class="warn"><strong>Security Alert:</strong> If you did not initiate this request, immediately contact your IT administrator and do NOT share this code.</div>
+            <p style="font-size:13px;color:#64748b">This OTP is required to complete the password change. Enter it in the admin portal to proceed.</p>
+          </div>
+          <div class="ft">&copy; ${new Date().getFullYear()} NF Plantation (Pvt) Ltd. | info@nfplantation.com</div>
+        </div>
+        </body></html>`;
+
+        await sendEmail({ to: ADMIN_OTP_DEST, subject: 'Admin Password Change OTP — NF Plantation', html, text: `Admin password change OTP: ${otp} (expires in 10 minutes)` });
+
+        res.json({ success: true, message: `OTP sent to ${ADMIN_OTP_DEST}` });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.adminChangePasswordWithOtp = async (req, res, next) => {
+    try {
+        const { otp, newPassword } = req.body;
+        if (!otp || !newPassword) return res.status(400).json({ success: false, message: 'OTP and new password are required.' });
+        if (newPassword.length < 8) return res.status(400).json({ success: false, message: 'Password must be at least 8 characters.' });
+
+        const userId = req.user._id.toString();
+        const stored = adminOtpStore.get(userId);
+        if (!stored) return res.status(400).json({ success: false, message: 'No OTP was requested. Please request a new OTP first.' });
+        if (Date.now() > stored.expiresAt) {
+            adminOtpStore.delete(userId);
+            return res.status(400).json({ success: false, message: 'OTP has expired. Please request a new one.' });
+        }
+        if (stored.otp !== otp.trim()) return res.status(400).json({ success: false, message: 'Invalid OTP. Please try again.' });
+
+        adminOtpStore.delete(userId);
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
+
+        // Hash and save (pre-save hook handles hashing — set plain password)
+        user.password = newPassword;
+        user.passwordChangedAt = new Date();
+        user.mustChangePassword = false;
+        await user.save();
+
+        AuditLog.create({
+            userId: req.user._id,
+            action: 'ADMIN_PASSWORD_CHANGED',
+            target: 'AUTH',
+            description: `${req.user.name} (${req.user.userId}) changed admin password via OTP verification`,
+            severity: 'CRITICAL',
+            ipAddress: req.ip || 'UNKNOWN'
+        }).catch(() => {});
+
+        res.json({ success: true, message: 'Password changed successfully.', passwordChangedAt: user.passwordChangedAt });
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.verifyNic = async (req, res, next) => {
     try {
         const { nic } = req.body;

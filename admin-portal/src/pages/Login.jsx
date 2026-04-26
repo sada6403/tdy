@@ -17,7 +17,7 @@ const Login = () => {
             const response = await authService.login({ user_id: userIdentifier, password });
             if (response.success) {
                 const user = response.data;
-                if (user.role !== 'ADMIN') {
+                if (!['ADMIN', 'BRANCH_ADMIN'].includes(user.role)) {
                     setError('Unauthorized: Admin access only.');
                     setLoading(false);
                     return;

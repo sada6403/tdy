@@ -5,7 +5,6 @@ const WithdrawalRequest = require('../models/WithdrawalRequest');
 const Payout = require('../models/Payout');
 const CustomerInvestment = require('../models/CustomerInvestment');
 const InvestmentPlan = require('../models/InvestmentPlan');
-const Expense = require('../models/Expense');
 const CustomerGroup = require('../models/CustomerGroup');
 const DepositRequest = require('../models/DepositRequest');
 const Wallet = require('../models/Wallet');
@@ -431,16 +430,16 @@ exports.getDashboardMetrics = async (req, res, next) => {
             { $project: { month: "$_id", total: 1, _id: 0 } }
         ]);
 
-        const monthlyExpenses = await Expense.aggregate([
-            { $match: { expenseDate: { $gte: sixMonthsAgo } } },
+        const monthlyProfit = await ProfitPayoutLog.aggregate([
+            { $match: { status: 'COMPLETED', createdAt: { $gte: sixMonthsAgo } } },
             {
                 $group: {
-                    _id: { $dateToString: { format: "%Y-%m", date: "$expenseDate" } },
-                    total: { $sum: "$amount" }
+                    _id: '$cycleMonth',
+                    total: { $sum: '$amountCalculated' }
                 }
             },
             { $sort: { _id: 1 } },
-            { $project: { month: "$_id", total: 1, _id: 0 } }
+            { $project: { month: '$_id', total: 1, _id: 0 } }
         ]);
 
         const totalApprovedCustomers = await User.countDocuments({ role: 'CUSTOMER' });
@@ -460,7 +459,7 @@ exports.getDashboardMetrics = async (req, res, next) => {
                 })),
                 chartData: {
                     investmentGrowth,
-                    monthlyExpenses
+                    monthlyProfit
                 }
             }
         });

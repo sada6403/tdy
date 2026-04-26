@@ -5,7 +5,6 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 const planController = require('../controllers/planController');
 const adminController = require('../controllers/adminController');
 const notificationController = require('../controllers/notificationController');
-const expenseController = require('../controllers/expenseController');
 const approvalController = require('../controllers/approvalController');
 const branchController = require('../controllers/branchController');
 const customerAdminController = require('../controllers/customerAdminController');
@@ -84,11 +83,6 @@ router.patch('/support-requests/:id/read', supportController.markSupportRead);
 router.get('/admin-notifications', supportController.getAdminNotifications);
 router.patch('/admin-notifications/mark-all-read', supportController.markAllAdminNotificationsRead);
 router.patch('/admin-notifications/:id/read', supportController.markAdminNotificationRead);
-
-// Manage Expenses (Cost Management)
-router.get('/expenses', expenseController.getExpenses);
-router.post('/expenses', expenseController.createExpense);
-router.get('/expenses/distribution', expenseController.getExpenseDistribution);
 
 // Manage Approvals
 router.get('/approvals', approvalController.getPendingApprovals);

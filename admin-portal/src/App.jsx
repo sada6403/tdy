@@ -28,11 +28,11 @@ import CustomerReport from './pages/CustomerReport';
 import HeroManagement from './pages/HeroManagement';
 import InvestmentPlans from './pages/InvestmentPlans';
 import Notifications from './pages/Notifications';
-import Expenses from './pages/Expenses';
 import WebsiteSettings from './pages/WebsiteSettings';
 import EventsManagement from './pages/EventsManagement';
 import CustomerSupport from './pages/CustomerSupport';
 import BranchAdmins from './pages/BranchAdmins';
+import Splash from './pages/Splash';
 
 const Placeholder = ({ title }) => (
   <div className="card" style={{ textAlign: 'center', padding: '100px 20px' }}>
@@ -46,6 +46,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
+          <Route path="/splash" element={<Splash />} />
           <Route path="/login" element={<Login />} />
           
           <Route element={<ProtectedAdminRoute />}>
@@ -74,7 +75,6 @@ function App() {
               <Route path="/branch-admins" element={<BranchAdmins />} />
               <Route path="/agents" element={<Agents />} />
               <Route path="/notifications" element={<Notifications />} />
-              <Route path="/expenses" element={<Expenses />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/audit-logs" element={<AuditLogs />} />
               <Route path="/settings" element={<Settings />} />
@@ -89,7 +89,7 @@ function App() {
             <Route path="/customers/:id/report/:category" element={<CustomerReport />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/splash" replace />} />
         </Routes>
       </Router>
     </AuthProvider>

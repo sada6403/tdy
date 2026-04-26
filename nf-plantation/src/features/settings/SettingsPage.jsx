@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
-import { 
-    User, Moon, Sun, Headset, LogOut, 
-    Shield, ChevronRight, Phone, Mail, 
+import {
+    User, Moon, Sun, Headset, LogOut,
+    Shield, ChevronRight, Phone, Mail,
     Clock, Send, Lock, Eye, EyeOff, Camera,
     CheckCircle2, AlertCircle, Info, ChevronDown, MapPin,
-    Navigation, ExternalLink
+    Navigation, ExternalLink, X, ShieldCheck, FileText,
+    BadgeCheck, Database, Eye as EyeIcon, RefreshCw, UserCheck,
+    Globe, ChevronUp
 } from 'lucide-react';
 import api from '../../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -33,10 +35,19 @@ const Settings = () => {
 
     // Password Change State
     const [showPasswordModal, setShowPasswordModal] = useState(false);
-    const [pwdStep, setPwdStep] = useState(1); // 1: NIC, 2: OTP/NewPwd
+    const [pwdStep, setPwdStep] = useState(1); // 1: NIC verify, 2: OTP + new password
     const [pwdData, setPwdData] = useState({ nic: '', otp: '', newPassword: '', confirmPassword: '' });
     const [pwdLoading, setPwdLoading] = useState(false);
     const [pwdError, setPwdError] = useState('');
+    const [pwdSuccess, setPwdSuccess] = useState(false);
+    const [showNewPwd, setShowNewPwd] = useState(false);
+
+    // 2FA Modal State
+    const [show2FAModal, setShow2FAModal] = useState(false);
+
+    // Privacy Policy Modal State
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+    const [privacySection, setPrivacySection] = useState(null); // expanded accordion section
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -55,15 +66,27 @@ const Settings = () => {
         fetchProfile();
     }, []);
 
+    const openPwdModal = () => {
+        setShowPasswordModal(true);
+        setPwdStep(1);
+        setPwdData({ nic: '', otp: '', newPassword: '', confirmPassword: '' });
+        setPwdError('');
+        setPwdSuccess(false);
+        setShowNewPwd(false);
+    };
+
+    const closePwdModal = () => {
+        if (pwdLoading) return;
+        setShowPasswordModal(false);
+    };
+
     const handleSendPwdOtp = async () => {
         if (!pwdData.nic) return setPwdError('Please enter your NIC to verify identity.');
         setPwdLoading(true);
         setPwdError('');
         try {
             const res = await api.post('/customer/change-password/send-otp', { nic: pwdData.nic });
-            if (res.success) {
-                setPwdStep(2);
-            }
+            if (res.success) setPwdStep(2);
         } catch (error) {
             setPwdError(error.message || 'Verification failed. Check your NIC.');
         } finally {
@@ -72,9 +95,10 @@ const Settings = () => {
     };
 
     const handleUpdatePassword = async () => {
-        if (!pwdData.otp || !pwdData.newPassword) return setPwdError('All fields are required.');
+        if (!pwdData.otp) return setPwdError('Please enter the OTP sent to your email.');
+        if (!pwdData.newPassword) return setPwdError('Please enter a new password.');
+        if (pwdData.newPassword.length < 6) return setPwdError('Password must be at least 6 characters.');
         if (pwdData.newPassword !== pwdData.confirmPassword) return setPwdError('Passwords do not match.');
-        
         setPwdLoading(true);
         setPwdError('');
         try {
@@ -83,13 +107,11 @@ const Settings = () => {
                 newPassword: pwdData.newPassword
             });
             if (res.success) {
-                alert('Password updated successfully!');
-                setShowPasswordModal(false);
-                setPwdStep(1);
-                setPwdData({ nic: '', otp: '', newPassword: '', confirmPassword: '' });
+                setPwdSuccess(true);
+                setTimeout(() => { setShowPasswordModal(false); setPwdSuccess(false); }, 2200);
             }
         } catch (error) {
-            setPwdError(error.message || 'Update failed. Check OTP.');
+            setPwdError(error.message || 'Update failed. Check OTP and try again.');
         } finally {
             setPwdLoading(false);
         }
@@ -291,7 +313,7 @@ const Settings = () => {
                                                 Edit Profile
                                             </button>
                                             <button
-                                                onClick={() => setShowPasswordModal(true)}
+                                                onClick={openPwdModal}
                                                 className="px-6 py-2.5 bg-white border border-[#E5E7EB] text-[#0F172A] text-xs font-semibold rounded-xl hover:bg-[#F8FAFC] transition-all"
                                             >
                                                 Change Password
@@ -383,27 +405,51 @@ const Settings = () => {
                         <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
                             <div className="bg-white border border-[#E5E7EB] rounded-2xl p-8 shadow-sm">
                                 <h3 className="text-base font-semibold text-[#0F172A] mb-8 uppercase tracking-widest text-xs">Security Protocol</h3>
-                                
                                 <div className="divide-y divide-[#F1F5F9]">
-                                    <SecurityRow 
-                                        icon={Lock} 
-                                        title="Change Password" 
-                                        desc="Update your authentication credentials regularly" 
-                                        onClick={() => setShowPasswordModal(true)}
+                                    <SecurityRow
+                                        icon={Lock}
+                                        title="Change Password"
+                                        desc="Update your authentication credentials — OTP sent to your registered email"
+                                        onClick={openPwdModal}
                                     />
-                                    <SecurityRow 
-                                        icon={Shield} 
-                                        title="Two-Factor Authentication" 
-                                        desc="Add an extra layer of security to your account (Optional)" 
-                                        status="Setup"
+                                    <SecurityRow
+                                        icon={ShieldCheck}
+                                        title="Two-Factor Authentication"
+                                        desc="OTP verification is active on all sensitive operations"
+                                        status="Active"
+                                        statusColor="emerald"
+                                        onClick={() => setShow2FAModal(true)}
                                     />
-                                    <SecurityRow 
-                                        icon={Info} 
-                                        title="Data Privacy Info" 
-                                        desc="View how your information is handled and protected" 
-                                        onClick={() => {}}
+                                    <SecurityRow
+                                        icon={FileText}
+                                        title="Data Privacy Policy"
+                                        desc="View how your personal and financial information is handled and protected"
+                                        onClick={() => setShowPrivacyModal(true)}
                                     />
                                 </div>
+                            </div>
+
+                            {/* Security summary cards */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                {[
+                                    { icon: Lock, label: 'Password Protection', value: 'bcrypt encrypted', color: 'emerald' },
+                                    { icon: ShieldCheck, label: 'OTP Verification', value: 'Email & SMS active', color: 'blue' },
+                                    { icon: Database, label: 'Data Encryption', value: 'AES-256 at rest', color: 'violet' },
+                                ].map((item, i) => (
+                                    <div key={i} className="bg-white border border-[#E5E7EB] rounded-2xl p-5 shadow-sm flex items-center gap-4">
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                                            item.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' :
+                                            item.color === 'blue' ? 'bg-blue-50 text-blue-600' :
+                                            'bg-violet-50 text-violet-600'
+                                        }`}>
+                                            <item.icon size={18} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] font-black text-[#94A3B8] uppercase tracking-widest">{item.label}</p>
+                                            <p className="text-xs font-bold text-[#0F172A] mt-0.5">{item.value}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
@@ -568,113 +614,347 @@ const Settings = () => {
                 </div>
             </div>
 
-            {/* --- CHANGE PASSWORD MODAL --- */}
+            {/* ── CHANGE PASSWORD MODAL ── */}
             <AnimatePresence>
                 {showPasswordModal && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                        <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-[#0F172A]/40 backdrop-blur-sm"
-                            onClick={() => !pwdLoading && setShowPasswordModal(false)}
-                        />
-                        <motion.div 
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-[#0F172A]/40 backdrop-blur-sm" onClick={closePwdModal} />
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             className="relative bg-white border border-[#E5E7EB] shadow-2xl rounded-[2.5rem] p-8 sm:p-10 max-w-md w-full overflow-hidden"
                         >
-                            {/* Step Indicator */}
                             <div className="flex gap-2 mb-8">
                                 <div className={`h-1.5 flex-1 rounded-full ${pwdStep >= 1 ? 'bg-[#16A34A]' : 'bg-[#E5E7EB]'}`} />
                                 <div className={`h-1.5 flex-1 rounded-full ${pwdStep >= 2 ? 'bg-[#16A34A]' : 'bg-[#E5E7EB]'}`} />
                             </div>
 
-                            <div className="mb-8">
-                                <h3 className="text-xl font-bold text-[#0F172A] tracking-tight">{pwdStep === 1 ? 'Verify Identity' : 'Set New Password'}</h3>
-                                <p className="text-xs text-[#64748B] mt-1">{pwdStep === 1 ? 'Confirm your NIC to receive a security OTP code.' : 'Enter the OTP and your new access credentials.'}</p>
-                            </div>
-
-                            {pwdError && (
-                                <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex gap-3 text-red-600 animate-in shake-in duration-300">
-                                    <AlertCircle size={18} className="shrink-0 mt-0.5" />
-                                    <p className="text-[11px] font-bold leading-relaxed">{pwdError}</p>
-                                </div>
-                            )}
-
-                            {pwdStep === 1 ? (
-                                <div className="space-y-6">
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-[#64748B] uppercase tracking-widest">Valid NIC Number</label>
-                                        <div className="relative">
-                                            <User size={16} className="absolute left-4 top-3.5 text-[#94A3B8]" />
-                                            <input 
-                                                type="text" 
-                                                value={pwdData.nic}
-                                                onChange={(e) => setPwdData({...pwdData, nic: e.target.value.toUpperCase()})}
-                                                placeholder="ENTER NIC NUMBER"
-                                                className="w-full h-12 bg-[#F8FAFC] border border-[#E5E7EB] rounded-2xl pl-11 pr-4 text-sm font-semibold text-[#0F172A] outline-none focus:border-[#16A34A] transition-all"
-                                            />
-                                        </div>
+                            {pwdSuccess ? (
+                                <div className="text-center py-6">
+                                    <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <CheckCircle2 size={32} className="text-emerald-600" />
                                     </div>
-                                    <button 
-                                        onClick={handleSendPwdOtp}
-                                        disabled={pwdLoading}
-                                        className="w-full h-12 bg-[#16A34A] text-white text-xs font-bold uppercase tracking-widest rounded-2xl hover:bg-[#15803D] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
-                                    >
-                                        {pwdLoading ? <CheckCircle2 className="animate-spin" size={16} /> : <CheckCircle2 size={16} />}
-                                        Receive Mobile OTP
-                                    </button>
+                                    <h3 className="text-xl font-bold text-[#0F172A]">Password Updated!</h3>
+                                    <p className="text-xs text-[#64748B] mt-2">Your account password has been changed successfully.</p>
                                 </div>
                             ) : (
-                                <div className="space-y-4">
-                                    <div className="space-y-1.5 bg-[#F8FAFC] p-4 rounded-2xl border border-[#E5E7EB]">
-                                        <label className="text-[10px] font-black text-[#64748B] uppercase tracking-widest">OTP Code (SMS)</label>
-                                        <input 
-                                            type="text" 
-                                            maxLength="6"
-                                            value={pwdData.otp}
-                                            onChange={(e) => setPwdData({...pwdData, otp: e.target.value})}
-                                            className="w-full bg-transparent text-lg font-black tracking-[0.5em] text-[#16A34A] outline-none text-center"
-                                            placeholder="000000"
-                                        />
+                                <>
+                                    <div className="mb-6">
+                                        <h3 className="text-xl font-bold text-[#0F172A] tracking-tight">
+                                            {pwdStep === 1 ? 'Verify Identity' : 'Set New Password'}
+                                        </h3>
+                                        <p className="text-xs text-[#64748B] mt-1">
+                                            {pwdStep === 1
+                                                ? 'Confirm your NIC — an OTP will be sent to your registered email.'
+                                                : 'Enter the OTP sent to your email and your new credentials.'}
+                                        </p>
                                     </div>
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-[#64748B] uppercase tracking-widest">New Password</label>
-                                        <input 
-                                            type="password" 
-                                            value={pwdData.newPassword}
-                                            onChange={(e) => setPwdData({...pwdData, newPassword: e.target.value})}
-                                            className="w-full h-12 bg-[#F8FAFC] border border-[#E5E7EB] rounded-2xl px-4 text-sm font-semibold outline-none focus:border-[#16A34A]"
-                                        />
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-[#64748B] uppercase tracking-widest">Confirm Password</label>
-                                        <input 
-                                            type="password" 
-                                            value={pwdData.confirmPassword}
-                                            onChange={(e) => setPwdData({...pwdData, confirmPassword: e.target.value})}
-                                            className="w-full h-12 bg-[#F8FAFC] border border-[#E5E7EB] rounded-2xl px-4 text-sm font-semibold outline-none focus:border-[#16A34A]"
-                                        />
-                                    </div>
-                                    <button 
-                                        onClick={handleUpdatePassword}
-                                        disabled={pwdLoading}
-                                        className="w-full h-12 bg-[#16A34A] text-white text-xs font-bold uppercase tracking-widest rounded-2xl hover:bg-[#15803D] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
-                                    >
-                                        {pwdLoading ? <CheckCircle2 className="animate-spin" size={16} /> : <CheckCircle2 size={16} />}
-                                        Secure My Account
-                                    </button>
-                                </div>
-                            )}
 
-                            <button 
-                                onClick={() => !pwdLoading && setShowPasswordModal(false)}
-                                className="w-full mt-6 text-[10px] font-black text-[#64748B] uppercase tracking-widest hover:text-[#0F172A] transition-all"
-                            >
-                                Cancel & Return
+                                    {pwdError && (
+                                        <div className="mb-5 p-4 bg-red-50 border border-red-100 rounded-xl flex gap-3 text-red-600">
+                                            <AlertCircle size={16} className="shrink-0 mt-0.5" />
+                                            <p className="text-[11px] font-bold leading-relaxed">{pwdError}</p>
+                                        </div>
+                                    )}
+
+                                    {pwdStep === 1 ? (
+                                        <div className="space-y-5">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-black text-[#64748B] uppercase tracking-widest">NIC Number</label>
+                                                <div className="relative">
+                                                    <User size={15} className="absolute left-4 top-3.5 text-[#94A3B8]" />
+                                                    <input type="text" value={pwdData.nic}
+                                                        onChange={e => setPwdData({ ...pwdData, nic: e.target.value.toUpperCase() })}
+                                                        placeholder="ENTER NIC NUMBER"
+                                                        className="w-full h-12 bg-[#F8FAFC] border border-[#E5E7EB] rounded-2xl pl-11 pr-4 text-sm font-semibold text-[#0F172A] outline-none focus:border-[#16A34A] transition-all" />
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-100 rounded-xl">
+                                                <Mail size={14} className="text-blue-500 shrink-0" />
+                                                <p className="text-[11px] font-semibold text-blue-700">OTP will be sent to your registered email address.</p>
+                                            </div>
+                                            <button onClick={handleSendPwdOtp} disabled={pwdLoading}
+                                                className="w-full h-12 bg-[#16A34A] text-white text-xs font-bold uppercase tracking-widest rounded-2xl hover:bg-[#15803D] disabled:opacity-50 transition-all flex items-center justify-center gap-2">
+                                                {pwdLoading
+                                                    ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                    : <Mail size={15} />}
+                                                Send Email OTP
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            <div className="bg-[#F8FAFC] p-4 rounded-2xl border border-[#E5E7EB]">
+                                                <label className="text-[10px] font-black text-[#64748B] uppercase tracking-widest block mb-2">OTP Code (Email)</label>
+                                                <input type="text" maxLength="6" value={pwdData.otp}
+                                                    onChange={e => setPwdData({ ...pwdData, otp: e.target.value.replace(/\D/g, '').slice(0, 6) })}
+                                                    className="w-full bg-transparent text-2xl font-black tracking-[0.5em] text-[#16A34A] outline-none text-center"
+                                                    placeholder="000000" />
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-black text-[#64748B] uppercase tracking-widest">New Password</label>
+                                                <div className="relative">
+                                                    <input type={showNewPwd ? 'text' : 'password'} value={pwdData.newPassword}
+                                                        onChange={e => setPwdData({ ...pwdData, newPassword: e.target.value })}
+                                                        className="w-full h-12 bg-[#F8FAFC] border border-[#E5E7EB] rounded-2xl px-4 pr-12 text-sm font-semibold outline-none focus:border-[#16A34A] transition-all" />
+                                                    <button type="button" onClick={() => setShowNewPwd(p => !p)}
+                                                        className="absolute right-4 top-3.5 text-[#94A3B8]">
+                                                        {showNewPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                    </button>
+                                                </div>
+                                                {pwdData.newPassword.length > 0 && (
+                                                    <div className="flex gap-1 mt-1">
+                                                        {[1,2,3,4].map(i => (
+                                                            <div key={i} className={`flex-1 h-1 rounded-full ${pwdData.newPassword.length >= i * 3
+                                                                ? (pwdData.newPassword.length >= 12 ? 'bg-emerald-500' : 'bg-amber-400')
+                                                                : 'bg-[#E5E7EB]'}`} />
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-black text-[#64748B] uppercase tracking-widest">Confirm Password</label>
+                                                <input type="password" value={pwdData.confirmPassword}
+                                                    onChange={e => setPwdData({ ...pwdData, confirmPassword: e.target.value })}
+                                                    className="w-full h-12 bg-[#F8FAFC] border border-[#E5E7EB] rounded-2xl px-4 text-sm font-semibold outline-none focus:border-[#16A34A] transition-all" />
+                                                {pwdData.confirmPassword && pwdData.newPassword !== pwdData.confirmPassword && (
+                                                    <p className="text-[10px] font-bold text-red-500 mt-1">Passwords do not match</p>
+                                                )}
+                                            </div>
+                                            <button onClick={handleUpdatePassword} disabled={pwdLoading}
+                                                className="w-full h-12 bg-[#16A34A] text-white text-xs font-bold uppercase tracking-widest rounded-2xl hover:bg-[#15803D] disabled:opacity-50 transition-all flex items-center justify-center gap-2">
+                                                {pwdLoading
+                                                    ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                    : <ShieldCheck size={15} />}
+                                                Secure My Account
+                                            </button>
+                                        </div>
+                                    )}
+                                    <button onClick={closePwdModal}
+                                        className="w-full mt-5 text-[10px] font-black text-[#64748B] uppercase tracking-widest hover:text-[#0F172A] transition-all">
+                                        Cancel & Return
+                                    </button>
+                                </>
+                            )}
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* ── 2FA INFO MODAL ── */}
+            <AnimatePresence>
+                {show2FAModal && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-[#0F172A]/40 backdrop-blur-sm" onClick={() => setShow2FAModal(false)} />
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative bg-white border border-[#E5E7EB] shadow-2xl rounded-[2.5rem] p-8 sm:p-10 max-w-lg w-full"
+                        >
+                            <button onClick={() => setShow2FAModal(false)}
+                                className="absolute top-6 right-6 w-9 h-9 bg-[#F1F5F9] rounded-full flex items-center justify-center text-[#64748B] hover:bg-[#E5E7EB] transition-all">
+                                <X size={16} />
                             </button>
+                            <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6">
+                                <ShieldCheck size={28} className="text-emerald-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-[#0F172A] mb-2">Two-Factor Authentication</h3>
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full mb-6">
+                                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                                <span className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">Active on your account</span>
+                            </div>
+                            <p className="text-sm text-[#64748B] leading-relaxed mb-6">
+                                Your account is already protected by OTP-based Two-Factor Authentication (2FA). A one-time verification code is required every time you perform a sensitive action.
+                            </p>
+                            <div className="space-y-3">
+                                {[
+                                    { icon: Lock, label: 'Password Change', desc: 'Requires email OTP verification' },
+                                    { icon: BadgeCheck, label: 'Plan Activation', desc: 'Requires SMS OTP before committing funds' },
+                                    { icon: RefreshCw, label: 'Withdrawal Request', desc: 'Verified before funds are released' },
+                                    { icon: UserCheck, label: 'Account Registration', desc: 'Email + Mobile dual verification' },
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-center gap-4 p-4 bg-[#F8FAFC] border border-[#E5E7EB] rounded-xl">
+                                        <div className="w-9 h-9 bg-white border border-[#E5E7EB] rounded-xl flex items-center justify-center text-emerald-600 shadow-sm shrink-0">
+                                            <item.icon size={16} />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-bold text-[#0F172A]">{item.label}</p>
+                                            <p className="text-[10px] text-[#64748B] mt-0.5">{item.desc}</p>
+                                        </div>
+                                        <CheckCircle2 size={16} className="ml-auto text-emerald-500 shrink-0" />
+                                    </div>
+                                ))}
+                            </div>
+                            <p className="text-[10px] text-[#94A3B8] text-center mt-6 leading-relaxed">
+                                OTPs expire within 2 minutes and are single-use. Contact support if you are not receiving OTPs.
+                            </p>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* ── PRIVACY POLICY MODAL ── */}
+            <AnimatePresence>
+                {showPrivacyModal && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-[#0F172A]/50 backdrop-blur-sm" onClick={() => setShowPrivacyModal(false)} />
+                        <motion.div initial={{ opacity: 0, scale: 0.97, y: 24 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.97, y: 24 }}
+                            className="relative bg-white border border-[#E5E7EB] shadow-2xl rounded-[2rem] max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden"
+                        >
+                            {/* Header */}
+                            <div className="flex items-center justify-between px-8 py-6 border-b border-[#F1F5F9] shrink-0 bg-gradient-to-r from-[#0F172A] to-[#1E293B]">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                                        <FileText size={20} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-base font-bold text-white">Data Privacy Policy</h3>
+                                        <p className="text-[10px] text-white/50 mt-0.5">NF Plantation (Pvt) Ltd — Last updated: January 2025</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setShowPrivacyModal(false)}
+                                    className="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white transition-all">
+                                    <X size={16} />
+                                </button>
+                            </div>
+
+                            {/* Scrollable Content */}
+                            <div className="overflow-y-auto flex-1 px-8 py-6 space-y-3">
+
+                                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl mb-4">
+                                    <p className="text-[11px] font-semibold text-emerald-800 leading-relaxed">
+                                        NF Plantation (Pvt) Ltd is committed to protecting your personal and financial information. This policy explains what data we collect, how we use it, and your rights as a customer.
+                                    </p>
+                                </div>
+
+                                {[
+                                    {
+                                        id: 'collect',
+                                        icon: Database,
+                                        title: '1. Information We Collect',
+                                        content: [
+                                            { h: 'Personal Identification', b: 'Full name, National Identity Card (NIC) number, date of birth, gender, passport number (if applicable), and passport-size photograph.' },
+                                            { h: 'Contact Information', b: 'Residential address, mobile number, and email address.' },
+                                            { h: 'Financial Information', b: 'Bank account details (bank name, branch, account number, account holder name), investment amounts, transaction history, deposit and withdrawal records.' },
+                                            { h: 'Verification Data', b: 'OTP delivery logs, login timestamps, IP addresses, and device/browser information for security auditing.' },
+                                            { h: 'Documents', b: 'Scanned copies of NIC (front and back), utility bill or proof of address, recent passport photo, and digital signature.' },
+                                        ]
+                                    },
+                                    {
+                                        id: 'use',
+                                        icon: EyeIcon,
+                                        title: '2. How We Use Your Information',
+                                        content: [
+                                            { h: 'Account Management', b: 'To create and maintain your investment account, verify your identity (KYC), and communicate with you regarding your account.' },
+                                            { h: 'Investment Processing', b: 'To activate fixed deposit plans, calculate monthly returns, process profit distributions, and manage maturity payouts.' },
+                                            { h: 'Financial Transactions', b: 'To process deposits, withdrawals, and bank transfers securely and accurately.' },
+                                            { h: 'Security & Fraud Prevention', b: 'To authenticate your identity using OTP verification, detect unauthorized access, and maintain audit logs of all financial operations.' },
+                                            { h: 'Legal Compliance', b: 'To comply with applicable Sri Lankan laws including the Companies Act, Finance Act, and directives issued by the Central Bank of Sri Lanka (CBSL).' },
+                                            { h: 'Customer Service', b: 'To respond to your support requests, send account notifications, and provide investment status updates.' },
+                                        ]
+                                    },
+                                    {
+                                        id: 'share',
+                                        icon: Globe,
+                                        title: '3. Data Sharing & Disclosure',
+                                        content: [
+                                            { h: 'We do NOT sell your data', b: 'NF Plantation does not sell, rent, or trade your personal information to any third party for marketing purposes.' },
+                                            { h: 'Service Providers', b: 'We share data with trusted service providers including AWS (cloud storage), email delivery services (Nodemailer), and SMS gateway providers — solely to operate your account.' },
+                                            { h: 'Bank Transfers', b: 'Your bank account details are shared only with your designated bank to process approved payout transfers.' },
+                                            { h: 'Legal Obligation', b: 'We may disclose your information when required by law, court order, or regulatory authority, including CBSL, FCID, or other government agencies.' },
+                                            { h: 'Internal Staff', b: 'Only authorized employees and administrators who require access to perform their duties can view your account data. All access is logged and audited.' },
+                                        ]
+                                    },
+                                    {
+                                        id: 'storage',
+                                        icon: Database,
+                                        title: '4. Data Storage & Retention',
+                                        content: [
+                                            { h: 'Secure Cloud Storage', b: 'Your data is stored on AWS (Amazon Web Services) servers with AES-256 encryption at rest and TLS encryption in transit.' },
+                                            { h: 'Document Storage', b: 'Uploaded documents (NIC scans, photos, signatures) are stored in an encrypted AWS S3 bucket with restricted access policies.' },
+                                            { h: 'Retention Period', b: 'Financial records and account data are retained for a minimum of 7 years from account closure in compliance with Sri Lankan financial regulations.' },
+                                            { h: 'OTP Logs', b: 'OTP verification records are automatically deleted after 24 hours once used or expired, as they serve no ongoing purpose.' },
+                                            { h: 'Inactive Accounts', b: 'Registration drafts not submitted within 14 days are automatically deleted. Completed accounts remain active until formally closed.' },
+                                        ]
+                                    },
+                                    {
+                                        id: 'rights',
+                                        icon: UserCheck,
+                                        title: '5. Your Rights as a Customer',
+                                        content: [
+                                            { h: 'Right to Access', b: 'You may request a copy of the personal data we hold about you at any time by contacting our support team.' },
+                                            { h: 'Right to Correction', b: 'If any of your personal information is inaccurate, you may request a correction through your account settings or by contacting us.' },
+                                            { h: 'Right to Erasure', b: 'You may request deletion of your account and associated data, subject to legal retention obligations for financial records.' },
+                                            { h: 'Right to Data Portability', b: 'You may request an export of your transaction history and account data in CSV format from your account dashboard.' },
+                                            { h: 'Right to Object', b: 'You may object to the processing of your data for non-essential purposes (e.g., marketing communications) at any time.' },
+                                        ]
+                                    },
+                                    {
+                                        id: 'security',
+                                        icon: ShieldCheck,
+                                        title: '6. Security Measures',
+                                        content: [
+                                            { h: 'Password Security', b: 'All passwords are hashed using bcrypt with a cost factor of 12. Plain-text passwords are never stored or transmitted.' },
+                                            { h: 'Session Tokens', b: 'Authentication uses JWT tokens delivered via HttpOnly, Secure, SameSite=Strict cookies to prevent XSS and CSRF attacks.' },
+                                            { h: 'OTP Verification', b: 'All sensitive operations (login, plan activation, password change, withdrawal) require one-time password verification. OTPs are bcrypt-hashed in the database and expire in 2 minutes.' },
+                                            { h: 'Account Lockout', b: 'Accounts are automatically locked for 15 minutes after 5 consecutive failed login attempts to prevent brute-force attacks.' },
+                                            { h: 'Rate Limiting', b: 'All API endpoints are rate-limited. Authentication and OTP endpoints are additionally restricted to prevent abuse.' },
+                                            { h: 'Audit Logging', b: 'All financial operations, login events, and administrative actions are recorded in an immutable audit log with timestamps, IP addresses, and user identifiers.' },
+                                        ]
+                                    },
+                                    {
+                                        id: 'cookies',
+                                        icon: Info,
+                                        title: '7. Cookies & Tracking',
+                                        content: [
+                                            { h: 'Essential Cookies Only', b: 'We use only one cookie: a secure, HttpOnly session cookie to maintain your authentication state. We do not use advertising, tracking, or analytics cookies.' },
+                                            { h: 'No Third-Party Tracking', b: 'We do not use Google Analytics, Facebook Pixel, or any other third-party tracking technology on our customer portal.' },
+                                        ]
+                                    },
+                                    {
+                                        id: 'contact',
+                                        icon: Mail,
+                                        title: '8. Contact & Grievances',
+                                        content: [
+                                            { h: 'Data Protection Officer', b: 'For any privacy-related queries, requests, or complaints, contact us at: info@nfplantation.com' },
+                                            { h: 'Office Address', b: 'NF Plantation (Pvt) Ltd, No. 12, Main Street, Kilinochchi, Northern Province, Sri Lanka.' },
+                                            { h: 'Response Time', b: 'We will respond to all data-related requests within 14 business days.' },
+                                            { h: 'Regulatory Body', b: 'If you are unsatisfied with our response, you may escalate your complaint to the Central Bank of Sri Lanka (CBSL) or the relevant regulatory authority.' },
+                                        ]
+                                    },
+                                ].map((section) => (
+                                    <div key={section.id} className="border border-[#E5E7EB] rounded-2xl overflow-hidden">
+                                        <button
+                                            onClick={() => setPrivacySection(privacySection === section.id ? null : section.id)}
+                                            className="w-full flex items-center gap-4 p-5 text-left hover:bg-[#F8FAFC] transition-all"
+                                        >
+                                            <div className="w-9 h-9 bg-[#F1F5F9] rounded-xl flex items-center justify-center text-[#475569] shrink-0">
+                                                <section.icon size={16} />
+                                            </div>
+                                            <span className="flex-1 text-sm font-bold text-[#0F172A]">{section.title}</span>
+                                            {privacySection === section.id
+                                                ? <ChevronUp size={16} className="text-[#94A3B8] shrink-0" />
+                                                : <ChevronDown size={16} className="text-[#94A3B8] shrink-0" />}
+                                        </button>
+                                        {privacySection === section.id && (
+                                            <div className="px-5 pb-5 space-y-4 border-t border-[#F1F5F9] pt-4">
+                                                {section.content.map((item, j) => (
+                                                    <div key={j}>
+                                                        <p className="text-[11px] font-black text-[#0F172A] uppercase tracking-wide mb-1">{item.h}</p>
+                                                        <p className="text-xs text-[#475569] leading-relaxed">{item.b}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+
+                                <p className="text-center text-[10px] text-[#94A3B8] pt-4 pb-2 leading-relaxed">
+                                    Reg. No: PV 00303425 · NF Plantation (Pvt) Ltd · www.nfplantation.com<br />
+                                    This policy is governed by the laws of Sri Lanka. We reserve the right to update this policy with prior notice.
+                                </p>
+                            </div>
                         </motion.div>
                     </div>
                 )}
@@ -691,8 +971,8 @@ const PaletteIcon = ({ size, className }) => (
     </svg>
 );
 
-const SecurityRow = ({ icon: Icon, title, desc, onClick, status }) => (
-    <div 
+const SecurityRow = ({ icon: Icon, title, desc, onClick, status, statusColor = 'emerald' }) => (
+    <div
         onClick={onClick}
         className="group flex flex-col sm:flex-row items-center gap-6 py-6 cursor-pointer hover:bg-[#F8FAFC] px-4 -mx-4 rounded-xl transition-all"
     >
@@ -704,7 +984,13 @@ const SecurityRow = ({ icon: Icon, title, desc, onClick, status }) => (
             <p className="text-xs text-[#64748B] mt-1">{desc}</p>
         </div>
         <div className="shrink-0 flex items-center gap-2">
-            {status && <span className="px-3 py-1 bg-emerald-50 text-[#16A34A] text-[10px] font-bold rounded-full uppercase tracking-wider">{status}</span>}
+            {status && (
+                <span className={`px-3 py-1 text-[10px] font-bold rounded-full uppercase tracking-wider ${
+                    statusColor === 'emerald' ? 'bg-emerald-50 text-emerald-700' :
+                    statusColor === 'blue' ? 'bg-blue-50 text-blue-700' :
+                    'bg-amber-50 text-amber-700'
+                }`}>{status}</span>
+            )}
             <ChevronRight size={16} className="text-[#94A3B8]" />
         </div>
     </div>

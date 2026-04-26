@@ -892,14 +892,13 @@ exports.sendChangePasswordOtp = async (req, res, next) => {
             userId: user._id,
             customerId: customer._id,
             email: user.email,
-            phone: user.phone,
             purpose: 'CHANGE_PASSWORD',
-            channels: ['SMS'],
+            channels: ['EMAIL'],
             ip: req.ip,
             userAgent: req.headers['user-agent']
         });
 
-        res.json({ success: true, message: 'Security OTP sent to your registered mobile number' });
+        res.json({ success: true, message: 'Security OTP sent to your registered email address' });
     } catch (error) {
         res.status(429).json({ success: false, message: error.message });
     }
@@ -911,7 +910,7 @@ exports.updatePasswordWithOtp = async (req, res, next) => {
         const user = await User.findById(req.user.id);
 
         await otpService.verifyOtp({
-            identifier: user.phone,
+            identifier: user.email,
             purpose: 'CHANGE_PASSWORD',
             otpInput: otp,
             ip: req.ip,

@@ -5,16 +5,24 @@ const notFound = (req, res, next) => {
     next(error);
 };
 
+const MAX_LOG_BYTES = 5 * 1024 * 1024; // 5 MB max, then rotate
+
 const errorHandler = (err, req, res, next) => {
     const statusCode = err.statusCode || (res.statusCode === 200 ? 500 : res.statusCode);
-    
-    // Write error stack to a file for debugging
+
+    // Write error to rotating log file (max 5 MB before truncation)
     const fs = require('fs');
     const path = require('path');
     const logPath = path.join(__dirname, '../../latest_error.log');
     try {
-        fs.appendFileSync(logPath, `\n[${new Date().toISOString()}] ${req.method} ${req.originalUrl}\n${err.stack}\n`);
-    } catch(e) {}
+        const entry = `\n[${new Date().toISOString()}] ${req.method} ${req.originalUrl}\n${err.stack}\n`;
+        const stat = fs.existsSync(logPath) ? fs.statSync(logPath) : null;
+        if (stat && stat.size > MAX_LOG_BYTES) {
+            fs.writeFileSync(logPath, entry); // rotate: truncate and start fresh
+        } else {
+            fs.appendFileSync(logPath, entry);
+        }
+    } catch (e) {}
 
     if (statusCode >= 500 || err.name === 'ReferenceError') {
         console.error(`[CRITICAL ERROR] ${req.method} ${req.originalUrl}:`, err);

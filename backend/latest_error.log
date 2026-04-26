@@ -30107,3 +30107,1389 @@ MongoServerError: unrecognized option to $unwind stage: preserveNullAndEmpty
     at async AggregationCursor.toArray (C:\work\nf plantation.com\tdy\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:406:26)
     at async Aggregate.exec (C:\work\nf plantation.com\tdy\backend\node_modules\mongoose\lib\aggregate.js:1112:14)
     at async exports.getAllBranches (C:\work\nf plantation.com\tdy\backend\src\controllers\branchController.js:38:32)
+
+[2026-04-25T19:34:14.166Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:14.174Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:16.448Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:16.457Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:18.046Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:18.054Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:19.131Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:19.139Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:21.797Z] GET /api/admin/admin-notifications?limit=10
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at logger (C:\work\nf plantation.com\tdy\backend\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+
+[2026-04-25T19:34:22.207Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:22.225Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:32.188Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:32.194Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:32.459Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:34:32.468Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:35:36.978Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:35:36.987Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:35:37.230Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:35:37.237Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:35:55.529Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:35:55.536Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:35:55.784Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:35:55.790Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-25T19:45:35.925Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:45:43.539Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:45:50.311Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:45:50.512Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:45:58.656Z] GET /api/customer/profile
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:45:58.958Z] GET /api/customer/profile
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:00.326Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:00.718Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:08.278Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:08.303Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:08.514Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:08.521Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:08.713Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:08.720Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:15.617Z] GET /api/customer/activities
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:15.910Z] GET /api/customer/activities
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:18.034Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:18.313Z] GET /api/customer/my-investments
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:20.252Z] GET /api/customer/profile
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:20.611Z] GET /api/customer/profile
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:23.216Z] GET /api/customer/activities
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:23.243Z] GET /api/customer/wallet
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:23.415Z] GET /api/customer/activities
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:23.437Z] GET /api/customer/wallet
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:28.836Z] GET /api/customer/wallet
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:28.915Z] GET /api/customer/activities
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:28.923Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:29.167Z] GET /api/customer/wallet
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:29.217Z] GET /api/customer/activities
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:29.223Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:29.439Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:39.320Z] GET /api/customer/profile
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T19:46:39.548Z] GET /api/customer/profile
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:00:21.059Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:00:50.960Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:01:22.050Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:02:21.949Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:03:21.943Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:04:21.923Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:05:22.000Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:06:21.954Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:07:21.987Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:08:21.973Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:09:21.971Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:10:21.983Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:11:22.002Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:12:22.010Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-25T20:34:55.436Z] GET /api/customer/notifications
+Error: Not authorized, token failed
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:39:25)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:549:9)
+    at process.processTimers (node:internal/timers:523:7)
+
+[2026-04-25T20:34:55.468Z] GET /api/admin/admin-notifications?limit=10
+Error: Not authorized, token failed
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:39:25)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:549:9)
+    at process.processTimers (node:internal/timers:523:7)
+
+[2026-04-25T20:34:55.490Z] GET /api/admin/support-requests?status=NEW
+Error: Not authorized, token failed
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:39:25)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processTimers (node:internal/timers:520:9)
+
+[2026-04-25T21:39:21.531Z] GET /api/customer/notifications
+Error: Not authorized, token failed
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:39:25)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:549:9)
+    at process.processTimers (node:internal/timers:523:7)
+
+[2026-04-25T21:39:21.539Z] GET /api/admin/admin-notifications?limit=10
+Error: Not authorized, token failed
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:39:25)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:549:9)
+    at process.processTimers (node:internal/timers:523:7)
+
+[2026-04-25T21:39:21.545Z] GET /api/admin/support-requests?status=NEW
+Error: Not authorized, token failed
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:39:25)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processTimers (node:internal/timers:520:9)
+
+[2026-04-25T23:39:24.225Z] GET /api/admin/support-requests?status=NEW
+Error: Not authorized, token failed
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:39:25)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:549:9)
+    at process.processTimers (node:internal/timers:523:7)
+
+[2026-04-25T23:39:24.229Z] GET /api/admin/admin-notifications?limit=10
+Error: Not authorized, token failed
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:39:25)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processTimers (node:internal/timers:520:9)
+
+[2026-04-26T06:27:43.893Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T06:27:52.426Z] GET /api/customer/profile
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T06:27:52.441Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T06:27:52.753Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T06:27:52.764Z] GET /api/customer/profile
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T06:30:10.166Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-26T06:30:10.230Z] GET /api/auth/me
+Error: Not authorized, no token
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:43:21)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:295:15
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at Function.handle (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:186:3)
+    at router (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+
+[2026-04-26T07:16:51.066Z] GET /api/admin/support-requests?status=NEW
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:16:51.121Z] GET /api/admin/admin-notifications?limit=10
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:16:55.990Z] GET /api/admin/admin-notifications?limit=10
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:23.526Z] GET /api/admin/support-requests?status=NEW
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:26.291Z] GET /api/admin/admin-notifications?limit=10
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:53.229Z] GET /api/admin/customers?search=
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:53.260Z] GET /api/admin/customers/summary
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:53.733Z] GET /api/admin/customers?search=
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:53.740Z] GET /api/admin/customers/summary
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:56.751Z] GET /api/admin/admin-notifications?limit=10
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:57.934Z] GET /api/admin/approvals
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:57.943Z] GET /api/admin/investments
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:57.949Z] GET /api/admin/deposits
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:57.957Z] GET /api/admin/dashboard
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:57.964Z] GET /api/admin/withdrawals
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:57.969Z] GET /api/admin/inquiries
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:58.547Z] GET /api/admin/approvals
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:58.555Z] GET /api/admin/investments
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:58.561Z] GET /api/admin/deposits
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:58.570Z] GET /api/admin/dashboard
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:58.580Z] GET /api/admin/inquiries
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:17:58.587Z] GET /api/admin/withdrawals
+Error: User role CUSTOMER is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:18:21.767Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:19:01.420Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:19:10.996Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-04-26T07:19:40.943Z] GET /api/customer/notifications
+Error: User role ADMIN is not authorized to access this route
+    at C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:51:25
+    at Layer.handleRequest (C:\work\nf plantation.com\tdy\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:342:13)
+    at C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:297:9
+    at processParams (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:582:12)
+    at next (C:\work\nf plantation.com\tdy\backend\node_modules\router\index.js:291:5)
+    at protect (C:\work\nf plantation.com\tdy\backend\src\middleware\authMiddleware.js:36:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

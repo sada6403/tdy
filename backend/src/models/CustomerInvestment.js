@@ -28,4 +28,10 @@ const CustomerInvestmentSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 
+// Compound index: daily payout job queries exactly this — without it every
+// cron run does a full collection scan on all investments.
+CustomerInvestmentSchema.index({ status: 1, nextProfitDate: 1 });
+// Customer dashboard: list investments per customer sorted newest first
+CustomerInvestmentSchema.index({ customerId: 1, createdAt: -1 });
+
 module.exports = mongoose.model('CustomerInvestment', CustomerInvestmentSchema);
