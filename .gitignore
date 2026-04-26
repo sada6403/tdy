@@ -1,7 +1,39 @@
 node_modules/
 backend/node_modules/
 nf-plantation/node_modules/
+admin-portal/node_modules/
 backend/uploads/
+
+# Environment files
 .env
+*.env
 backend/.env
 nf-plantation/.env
+admin-portal/.env
+
+# Log files
+*.log
+*.txt
+backend/logs/
+backend/output.txt
+backend/token.txt
+
+# Temporary debug/test/fix scripts in root backend folder
+backend/check*.js
+backend/debug*.js
+backend/fix*.js
+backend/test*.js
+backend/inspect*.js
+backend/list*.js
+backend/sync*.js
+backend/tmp*.js
+backend/seed*.js
+
+# Temporary folders
+backend/tmp/
+backend/scratch/
+
+# Build outputs
+dist/
+build/
+.vite/
