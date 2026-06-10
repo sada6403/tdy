@@ -20,8 +20,17 @@ const CustomerSchema = new mongoose.Schema({
   },
   branchId: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch' },
   agentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Agent' },
+  isActive: { type: Boolean, default: false },
+  dob: { type: Date },
+  gender: { type: String, trim: true },
   kycStatus: { type: String, enum: ['PENDING', 'VERIFIED', 'REJECTED'], default: 'PENDING' },
-  signature: { type: String }, // Base64 or URL
+  signature: { type: String },
+  photoUrl: { type: String, default: '' },
+  registrationDocuments: [{
+    type:    { type: String },
+    fileUrl: { type: String },
+    s3Key:   { type: String }
+  }],
   createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 

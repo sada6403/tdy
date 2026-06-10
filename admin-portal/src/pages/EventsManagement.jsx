@@ -6,6 +6,7 @@ import {
     Image as ImageIcon, PlayCircle, Award, MessageSquare, Plus, Trash2, Edit2, Check, X,
     ChevronDown, ChevronUp, GripVertical
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { getAllEvents, createEvent, updateEvent, deleteEvent } from '../services/api/adminEvents';
 
 const EventsManagement = () => {
@@ -158,6 +159,50 @@ const EventsManagement = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', maxWidth: '1200px', position: 'relative' }}>
+            {/* Sub-navigation Tabs */}
+            <div style={{ 
+                display: 'flex', 
+                gap: '8px', 
+                backgroundColor: '#f1f5f9', 
+                padding: '6px', 
+                borderRadius: '16px',
+                width: 'fit-content'
+            }}>
+                <Link to="/website-settings" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    color: '#64748b',
+                    transition: 'all 0.2s'
+                }}>
+                    General Settings
+                </Link>
+                <Link to="/hero-management" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    color: '#64748b',
+                    transition: 'all 0.2s'
+                }}>
+                    Hero Management
+                </Link>
+                <Link to="/events-management" style={{
+                    padding: '10px 24px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    textDecoration: 'none',
+                    backgroundColor: 'white',
+                    color: 'var(--primary)',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}>
+                    Events & Media
+                </Link>
+            </div>
             {/* Custom Toast Notification */}
             {notification && (
                 <div style={{

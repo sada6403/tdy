@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { 
-  ArrowLeft, CheckCircle2, XCircle, AlertTriangle, 
-  User, Wallet, Landmark, TrendingUp, History, 
+import {
+  ArrowLeft, CheckCircle2, XCircle, AlertTriangle,
+  User, Wallet, Landmark, TrendingUp, History,
   ShieldCheck, Loader2, FileText, Download,
   ExternalLink, Calendar, Info, RefreshCw,
-  MoreVertical, CheckSquare
+  MoreVertical, CheckSquare, PieChart
 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { profitService } from '../services/api/adminProfit';

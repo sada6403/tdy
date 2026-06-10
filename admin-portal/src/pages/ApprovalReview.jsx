@@ -694,16 +694,35 @@ const ApprovalReview = () => {
                             </div>
                         </div>
 
-                        <button 
-                            onClick={() => navigate('/customer-approvals')}
-                            style={{ 
-                                width: '100%', padding: '16px', borderRadius: '12px', border: 'none',
-                                backgroundColor: '#0f172a', color: 'white', fontWeight: '800', fontSize: '15px',
-                                cursor: 'pointer', transition: 'transform 0.2s ease'
-                            }}
-                        >
-                            Return to Queue
-                        </button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <button
+                                onClick={() => {
+                                    const customerId = data?.customer?._id;
+                                    const branchId = data?.customer?.branchId;
+                                    const params = new URLSearchParams({ tab: 'assignment' });
+                                    if (customerId) params.set('customerId', customerId);
+                                    if (branchId) params.set('branchId', typeof branchId === 'object' ? branchId._id : branchId);
+                                    navigate(`/agents?${params.toString()}`);
+                                }}
+                                style={{
+                                    width: '100%', padding: '16px', borderRadius: '12px', border: 'none',
+                                    backgroundColor: '#059669', color: 'white', fontWeight: '800', fontSize: '15px',
+                                    cursor: 'pointer', transition: 'transform 0.2s ease'
+                                }}
+                            >
+                                Assign Field Agent →
+                            </button>
+                            <button
+                                onClick={() => navigate('/customer-approvals')}
+                                style={{
+                                    width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0',
+                                    backgroundColor: 'white', color: '#475569', fontWeight: '700', fontSize: '14px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Return to Queue
+                            </button>
+                        </div>
                     </div>
                     <style>{`
                         @keyframes modalSlideIn {

@@ -175,6 +175,36 @@ const CustomerDetail = () => {
                 </div>
               </div>
 
+              {/* Assigned Agent Card */}
+              <div className="card" style={{ padding: '28px', border: profile.agent ? '1px solid #bbf7d0' : '1px solid #f1f5f9', backgroundColor: profile.agent ? '#f0fdf4' : '#f8fafc' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: profile.agent ? '20px' : '0' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: '900', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <UserCog size={18} style={{ color: profile.agent ? '#059669' : '#94a3b8' }} /> Assigned Field Agent
+                  </h3>
+                  {!profile.agent && (
+                    <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '700' }}>No agent assigned yet</span>
+                  )}
+                </div>
+                {profile.agent && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px 24px' }}>
+                    {[
+                      { label: 'Agent Name', value: profile.agent.name, icon: <User size={14} /> },
+                      { label: 'Mobile Number', value: profile.agent.contact, icon: <Phone size={14} /> },
+                      { label: 'Email Address', value: profile.agent.email || 'Not provided', icon: <Mail size={14} /> },
+                      { label: 'Designation', value: profile.agent.designation || 'Field Agent', icon: <UserCog size={14} /> },
+                      ...(profile.agent.employeeId ? [{ label: 'Employee ID', value: profile.agent.employeeId, icon: <ShieldCheck size={14} /> }] : [])
+                    ].map((item, i) => (
+                      <div key={i}>
+                        <p style={{ fontSize: '11px', fontWeight: '800', color: '#065f46', textTransform: 'uppercase', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          {item.icon} {item.label}
+                        </p>
+                        <p style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a' }}>{item.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Wallet & Financial Stats Grid */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                  <div className="card" style={{ padding: '24px', backgroundColor: '#0f172a', color: 'white' }}>
@@ -283,7 +313,7 @@ const CustomerDetail = () => {
                         </div>
                         <div style={{ textAlign: 'right' }}>
                            <p style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '800' }}>ALLOCATED AMOUNT</p>
-                           <p style={{ fontSize: '18px', fontWeight: '900' }}>LKR {inv.investedAmount.toLocaleString()}</p>
+                           <p style={{ fontSize: '18px', fontWeight: '900' }}>LKR {(inv.investedAmount || 0).toLocaleString()}</p>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <p style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '800' }}>MATURITY</p>
@@ -292,7 +322,14 @@ const CustomerDetail = () => {
                         <div>
                            <span className={`badge ${inv.status === 'ACTIVE' ? 'badge-success' : 'badge-secondary'}`}>{inv.status}</span>
                         </div>
-                        <button className="card" style={{ padding: '10px' }}><ExternalLink size={16} /></button>
+                        <button 
+                           className="card" 
+                           style={{ padding: '10px', cursor: 'pointer' }}
+                           onClick={() => navigate(`/plan-activations/${inv._id || inv.id}`)}
+                           title="View Investment Details"
+                        >
+                           <ExternalLink size={16} />
+                        </button>
                      </div>
                    ))
                  ) : (

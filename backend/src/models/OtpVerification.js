@@ -8,8 +8,8 @@ const OtpVerificationSchema = new mongoose.Schema({
     email: { type: String, trim: true, lowercase: true },
     mobileNumber: { type: String, trim: true },
     
-    purpose: { 
-        type: String, 
+    purpose: {
+        type: String,
         required: true,
         enum: [
             'REGISTRATION_VERIFICATION',
@@ -17,7 +17,8 @@ const OtpVerificationSchema = new mongoose.Schema({
             'LOGIN_VERIFICATION',
             'PLAN_ACTIVATION',
             'WITHDRAWAL_CONFIRMATION',
-            'SENSITIVE_ACTION'
+            'SENSITIVE_ACTION',
+            'CHANGE_PASSWORD'
         ],
         index: true 
     },

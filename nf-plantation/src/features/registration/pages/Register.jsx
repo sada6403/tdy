@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 import { useLanguage } from '../../../context/LanguageContext';
-import { useAuth } from '../../../context/AuthContext';
 import { 
     User, CreditCard, FileText, Upload, CheckCircle, Check,
     ChevronRight, ChevronLeft, ShieldCheck, 
@@ -62,10 +61,10 @@ const CameraCaptureModal = ({ isOpen, onClose, onCapture, label }) => {
             if (blob) {
                 const file = new File([blob], `camera_capture_${Date.now()}.jpg`, { type: 'image/jpeg' });
                 const previewUrl = URL.createObjectURL(blob);
-                onCapture({ file, previewUrl, name: file.name, type: file.type });
+                onCapture({ file, previewUrl, name: file.name, type: file.type, size: file.size });
                 onClose();
             }
-        }, 'image/jpeg', 0.9);
+        }, 'image/jpeg', 0.7);
     };
 
     if (!isOpen) return null;
@@ -224,8 +223,48 @@ const SignaturePad = ({ onSave, onClear, value }) => {
     );
 };
 
+// ── Image compression: reduces any image to ≤ 2 MB before upload ─────────────
+const MAX_DOC_BYTES = 2 * 1024 * 1024; // 2 MB
+
+const compressImage = (file) => new Promise((resolve) => {
+    if (!file.type.startsWith('image/') || file.size <= MAX_DOC_BYTES) {
+        resolve(file);
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let { width, height } = img;
+            const maxDim = 1920;
+            if (width > maxDim || height > maxDim) {
+                const scale = maxDim / Math.max(width, height);
+                width = Math.round(width * scale);
+                height = Math.round(height * scale);
+            }
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+            const tryQ = (q) => {
+                canvas.toBlob((blob) => {
+                    if (!blob) { resolve(file); return; }
+                    if (blob.size <= MAX_DOC_BYTES || q <= 0.25) {
+                        const name = file.name.replace(/\.[^.]+$/, '.jpg');
+                        resolve(new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() }));
+                    } else {
+                        tryQ(+(q - 0.1).toFixed(1));
+                    }
+                }, 'image/jpeg', q);
+            };
+            tryQ(0.82);
+        };
+        img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
 const PlantationRegister = () => {
-    const { navigate } = useAuth(); // or from react-router
     const routerNavigate = useNavigate();
     const [branches, setBranches] = useState([]);
 
@@ -424,12 +463,20 @@ const PlantationRegister = () => {
         if (errors.emailOtp) setErrors(prev => ({ ...prev, emailOtp: '' }));
     };
 
-    const handleFileChange = (e, field) => {
-        const file = e.target.files[0];
-        if (file) {
-            setFormData({ ...formData, [field]: { file, previewUrl: URL.createObjectURL(file), name: file.name, type: file.type } });
-            if (errors[field]) setErrors({ ...errors, [field]: '' });
+    const handleFileChange = async (e, field) => {
+        const raw = e.target.files[0];
+        if (!raw) return;
+
+        // PDFs and non-image files: reject if > 2 MB
+        if (!raw.type.startsWith('image/') && raw.size > MAX_DOC_BYTES) {
+            setErrors(prev => ({ ...prev, [field]: `File too large (${(raw.size / 1024 / 1024).toFixed(1)} MB). Max 2 MB.` }));
+            e.target.value = '';
+            return;
         }
+
+        const file = await compressImage(raw);
+        setFormData(prev => ({ ...prev, [field]: { file, previewUrl: URL.createObjectURL(file), name: file.name, type: file.type, size: file.size } }));
+        if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
     };
 
     const removeFile = (field) => setFormData({ ...formData, [field]: null });
@@ -515,8 +562,6 @@ const PlantationRegister = () => {
             if (!formData.district) e.district = "District is required";
             if (!formData.province) e.province = "Province is required";
         } else if (step === 3) {
-            // Temporarily skipping phone verification due to SMS API issues
-            // if (!formData.isVerified) e.otp = "Phone verification required";
             if (!formData.isEmailVerified) e.emailOtp = "Email verification required";
         } else if (step === 4) {
             if (!formData.preferredBranch) e.preferredBranch = "Preferred branch is required";
@@ -654,7 +699,9 @@ const PlantationRegister = () => {
                     </div>
                     <div className="flex flex-col flex-1 min-w-0">
                         <span className="truncate text-[10px] font-bold text-slate-700">{formData[field].name}</span>
-                        <span className="text-[8px] text-emerald-600 font-bold uppercase tracking-wider">Ready to submit</span>
+                        <span className="text-[8px] text-emerald-600 font-bold uppercase tracking-wider">
+                            {formData[field].size ? `${(formData[field].size / 1024).toFixed(0)} KB · ` : ''}Ready to submit
+                        </span>
                     </div>
                     <X size={16} className="cursor-pointer text-slate-400 hover:text-red-500 transition-colors" onClick={() => removeFile(field)} />
                 </div>

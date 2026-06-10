@@ -24,6 +24,9 @@ const protect = async (req, res, next) => {
             // Standardize request user
             req.user = user;
 
+            // Track last seen (non-blocking)
+            User.updateOne({ _id: user._id }, { lastSeen: new Date() }).catch(() => {});
+
             // Pre-fetch customer profile for controllers if role is CUSTOMER
             if (user.role === 'CUSTOMER' && user.customerId) {
                 const customer = await Customer.findById(user.customerId);

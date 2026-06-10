@@ -18,6 +18,7 @@ const MonthlyProfit = () => {
   const [processing, setProcessing] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [stats, setStats] = useState({ volumeNext7Days: 0, dueCount: 0 });
 
   const fetchSchedules = async () => {
     try {
@@ -25,6 +26,12 @@ const MonthlyProfit = () => {
       const res = await profitService.getPayoutSchedules(statusFilter);
       if (res.success) {
         setSchedules(res.data);
+      }
+      
+      // Also fetch stats
+      const statsRes = await profitService.getPayoutStats();
+      if (statsRes.success) {
+        setStats(statsRes.data);
       }
     } catch (err) {
       setError(err.message);
@@ -113,7 +120,7 @@ const MonthlyProfit = () => {
           <button className="card" style={{ padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '12px', borderColor: '#8b5cf630' }}>
             <div style={{ textAlign: 'right' }}>
               <p style={{ fontSize: '10px', fontWeight: '800', color: '#8b5cf6', textTransform: 'uppercase' }}>Volume Next 7 Days</p>
-              <p style={{ fontSize: '16px', fontWeight: '800', color: '#6d28d9' }}>LKR 425,000.00</p>
+              <p style={{ fontSize: '16px', fontWeight: '800', color: '#6d28d9' }}>LKR {stats.volumeNext7Days?.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
             </div>
             <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#8b5cf6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <PieChart size={20} />

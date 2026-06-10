@@ -8,6 +8,15 @@ const Payout = require('../models/Payout');
 const Customer = require('../models/Customer');
 const { getSafeSession, safeStartTransaction, safeCommitTransaction, safeAbortTransaction } = require('../../utils/transactionHelper');
 
+// Safe month addition — prevents overflow (e.g. Jan 31 + 1 month = Feb 28, not Mar 3)
+function addMonths(date, months) {
+    const d = new Date(date);
+    const day = d.getDate();
+    d.setMonth(d.getMonth() + months, 1);
+    d.setDate(Math.min(day, new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()));
+    return d;
+}
+
 /**
  * Monthly Profit Engine
  * Securely distributes monthly profit bounds with idempotency and retry-safety.
@@ -39,13 +48,12 @@ class ProfitEngineService {
             try {
                 // Calculate elapsed months since start date
                 const start = new Date(investment.startDate);
-                let baseDate = new Date(start);
-                baseDate.setMonth(baseDate.getMonth() + 1); // first payout is 1 month after start
-                
+                let baseDate = addMonths(start, 1); // first payout is 1 month after start
+
                 while (baseDate <= now && baseDate <= new Date(investment.endDate)) {
                     // Weekend Adjustment: Move execution date to next weekday if needed
                     const executionDate = this.getNextWeekday(baseDate);
-                    
+
                     // If the adjusted execution date is in the future, we don't process it yet
                     if (executionDate > now) {
                         break;
@@ -56,14 +64,14 @@ class ProfitEngineService {
 
                     // Check if already processed
                     const existingLog = await ProfitPayoutLog.findOne({ idempotencyKey });
-                    
+
                     if (!existingLog || existingLog.status === 'FAILED') {
                         await this.processPayout(investment, cycleMonth, idempotencyKey);
                         successCount++;
                     }
-                    
+
                     // Move baseDate to the next month's anniversary (NOT based on executionDate)
-                    baseDate.setMonth(baseDate.getMonth() + 1);
+                    baseDate = addMonths(baseDate, 1);
                 }
             } catch (err) {
                 console.error(`[PROFIT ENGINE] Failed to process investment ${investment._id}:`, err.message);
@@ -151,7 +159,7 @@ class ProfitEngineService {
             if (investment.profitDestination === 'BANK') {
                 const customer = await Customer.findById(investment.customerId).session(session);
                 if (customer && customer.bankDetails?.accountNumber) {
-                    await WithdrawalRequest.create([{
+                    const withdrawal = await WithdrawalRequest.create([{
                         customerId: investment.customerId,
                         walletId: wallet._id,
                         amount: amountCalculated,

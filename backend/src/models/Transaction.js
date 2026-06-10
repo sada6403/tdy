@@ -34,4 +34,9 @@ const TransactionSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 
+// Customer transaction history: sorted by newest first, filtering out HOLD type
+TransactionSchema.index({ customerId: 1, createdAt: -1 });
+// Admin reports: aggregate by type + date range
+TransactionSchema.index({ type: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Transaction', TransactionSchema);
