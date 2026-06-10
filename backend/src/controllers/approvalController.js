@@ -14,8 +14,7 @@ const User = require('../models/User');
 const Wallet = require('../models/Wallet');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const { finalizeS3File, s3 } = require('../utils/s3Service');
-const { GetObjectCommand } = require('@aws-sdk/client-s3');
+const { finalizeS3File, extractKey } = require('../utils/s3Service');
 const { getSafeSession, safeStartTransaction, safeCommitTransaction, safeAbortTransaction } = require('../utils/transactionHelper');
 
 const WORKFLOW_STATUS = {

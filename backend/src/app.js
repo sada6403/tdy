@@ -1,23 +1,17 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv');
-const result = dotenv.config();
-
-if (result.error) {
-    console.error('❌ Error loading .env file:', result.error);
-} else {
-    console.log(`✅ Environment variables loaded successfully (${Object.keys(result.parsed || {}).length} variables)`);
-}
 
 // Critical Environment Check
 const criticalEnvVars = ['JWT_SECRET', 'MONGODB_URI', 'PORT'];
 criticalEnvVars.forEach(varName => {
     if (!process.env[varName]) {
         console.error(`🚨 CRITICAL ERROR: Environment variable ${varName} is missing!`);
+        // In production, we might want to exit, but for now we just log loudly.
     }
 });
 
